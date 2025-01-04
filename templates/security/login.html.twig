@@ -1,40 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
-
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+<div class="container-fluid" style="background-image: url('/images/BackgroundLog.jpg'); background-size: cover; background-position: center; height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div class="card" style="max-width: 450px; width: 100%; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); border-radius: 15px; overflow: hidden; background-color: rgba(255, 255, 255, 0.95);">
+        <div class="card-header text-center" style="background-color: #5b3c11; padding: 20px;">
+            <h1 style="color: white; font-size: 1.8em; margin: 0;">Connexion</h1>
         </div>
-    {% endif %}
+        <div class="card-body">
+            {% if error %}
+                <div class="alert alert-danger text-center" style="font-size: 1em;">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+            <form method="post" style="display: flex; flex-direction: column; gap: 20px;">
+                <input type="text" name="_username" id="username" placeholder="Votre email" required value="{{ last_username }}" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;">
+                <input type="password" name="_password" id="password" placeholder="Votre mot de passe" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;">
+                <button type="submit" style="padding: 10px 20px; background-color: #5b3c11; color: white; border: none; border-radius: 5px; font-size: 1.2em; cursor: pointer;">
+                    Se connecter
+                </button>
+            </form>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
+            <p class="text-center mt-4" style="margin-top: 20px; font-size: 1em;">
+                Pas encore inscrit ? 
+                <span>
+                    <a href="{{ path('app_dev_register') }}" style="color: #5b3c11; font-weight: bold;">Développeur</a> ou 
+                    <a href="{{ path('app_company_register') }}" style="color: #5b3c11; font-weight: bold;">Entreprise</a>
+                </span>
+            </p>
+        </div>
+        <div class="card-footer text-center" style="padding: 15px; background-color: #F8F9FA;">
+            <small style="font-size: 0.9em; color: #6c757d;">© 2025 NexusJobs</small>
+        </div>
     </div>
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-    <button class="btn btn-lg btn-secondary mt-3" onclick="location.href='{{ path('app_register') }}';" type="button">
-        Sign up
-    </button>
-</form>
+</div>
 {% endblock %}

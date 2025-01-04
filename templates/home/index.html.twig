@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container-fluid" style="background-image: url('/images/Background-home1.jpg'); background-size: cover; background-position: center; height: 100vh; padding-top: 70px;">
+    <div class="container text-center">
+        <div class="card mx-auto" style="max-width: 600px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); border: 2px solid #2F4F4F; background-color: #C89F73;">
+            <div class="card-header text-white" style="background-color: #2F4F4F;">
+                <h1>Bienvenue sur NexusJobs</h1>
+            </div>
+            <div class="card-body">
+                <p class="mb-4" style="font-size: 1.5em; font-weight: bold; color: #2F4F4F;">Veuillez vous inscrire en tant que :</p>
+                <div class="d-flex justify-content-around" style="gap: 20px;">
+                    <div>
+                        <a href="{{ path('app_dev_register') }}" class="btn" style="background-color: #2F4F4F; color: white; padding: 15px 30px; font-size: 1.1em;">Développeur·se</a>
+                        <img src="/images/developer1.jpg" alt="Développeur" class="img-fluid mt-3" style="max-height: 300px;">
+                    </div>
+                    <div>
+                        <a href="{{ path('app_company_register') }}" class="btn" style="background-color: #2F4F4F; color: white; padding: 15px 30px; font-size: 1.1em;">Entreprise</a>
+                        <img src="/images/company1.jpg" alt="Entreprise" class="img-fluid mt-3" style="max-height: 300px;">
+                    </div>
+                </div>
+                <p class="mt-4" style="font-size: 1.3em; font-weight: bold; color: #2F4F4F;">Vous avez déjà un compte ?</p>
+                <a href="{{ path('app_login') }}" class="btn" style="background-color: #2F4F4F; color: white; border: 2px solid #2F4F4F; padding: 10px 20px; font-size: 1.1em;">Se connecter</a>
+            </div>
+            <div class="card-footer text-center" style="padding: 15px; background-color: #2F4F4F;">
+                <small style="font-size: 0.9em; color: #6c757d;">© 2025 NexusJobs</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
