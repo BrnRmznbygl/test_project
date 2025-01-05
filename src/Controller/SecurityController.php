@@ -56,7 +56,7 @@ public function registerDev(
     if ($form->isSubmitted() && !$form->isValid()) {
         $errors = $form->getErrors(true, false);
         foreach ($errors as $error) {
-            dump($error->getMessage());
+            dump((string) $error);
         }
         exit; // This will print errors directly to the screen. You can use it to inspect errors in the profiler.
     }
@@ -71,7 +71,7 @@ public function registerDev(
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return $this->redirectToRoute('dev_login');
+        return $this->redirectToRoute('app_login');
     }
 
     return $this->render('registration/dev_register.html.twig', [
@@ -101,7 +101,7 @@ public function registerDev(
             $entityManager->persist($user);
             $entityManager->flush();
     
-            return $this->redirectToRoute('company_login');
+            return $this->redirectToRoute('app_login');
         }
     
         return $this->render('registration/company_register.html.twig', [

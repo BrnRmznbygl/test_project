@@ -50,8 +50,8 @@ security:
         - { path: ^/company/register, roles: PUBLIC_ACCESS }
 
         # Restreindre l'accès selon les rôles
-        - { path: ^/dev, roles: ROLE_DEV }
-        - { path: ^/company, roles: ROLE_COMPANY }
+        - { path: ^/dev/, roles: ROLE_DEV }
+        - { path: ^/company/, roles: ROLE_COMPANY }
 
 when@test:
     security:

@@ -45,14 +45,15 @@ class HomePageController extends AbstractController
         ]);
     }
 
-    #[Route('/developer/home', name: 'developer_home')]
+    #[Route('/dev/home', name: 'developer_home')]
     public function developerHome(JobPostRepository $jobPostRepo): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_DEV');
         // Récupérer les postes les plus populaires et les dernières offres publiées
         $mostViewedPosts = $jobPostRepo->findMostViewedPosts(5);
         $latestPosts = $jobPostRepo->findLatestPosts(3);
 
-        return $this->render('home/developer_home.html.twig', [
+        return $this->render('home/dev_home.html.twig', [
             'mostViewedPosts' => $mostViewedPosts,
             'latestPosts' => $latestPosts,
         ]);

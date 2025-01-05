@@ -14,6 +14,7 @@
             {% endif %}
 
             <form method="post" style="display: flex; flex-direction: column; gap: 20px;">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                 <input type="text" name="_username" id="username" placeholder="Votre email" required value="{{ last_username }}" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;">
                 <input type="password" name="_password" id="password" placeholder="Votre mot de passe" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;">
                 <button type="submit" style="padding: 10px 20px; background-color: #5b3c11; color: white; border: none; border-radius: 5px; font-size: 1.2em; cursor: pointer;">

@@ -7,20 +7,19 @@
             <h1 style="color: white; font-size: 1.8em; margin: 0;">Inscription - Entreprise</h1>
         </div>
         <div class="card-body">
-            <form method="post" style="display: flex; flex-direction: column; gap: 20px;">
-                <input type="text" name="company_name" placeholder="Nom de l'entreprise" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;">
-                <input type="email" name="email" placeholder="Email de l'entreprise" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;">
-                <input type="password" name="password" placeholder="Mot de passe" required style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;">
+            {{ form_start(registrationForm, {'attr': {'style': 'display: flex; flex-direction: column; gap: 20px;'}}) }}
+                {{ form_row(registrationForm.email, {'attr': {'placeholder': "Email de l'entreprise", 'style': 'padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;'}}) }}
+                {{ form_row(registrationForm.plainPassword.first, {'attr': {'placeholder': 'Mot de passe', 'style': 'padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;'}}) }}
+                {{ form_row(registrationForm.plainPassword.second, {'attr': {'placeholder': 'Répétez votre mot de passe', 'style': 'padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;'}}) }}
+                {{ form_row(registrationForm.agreeTerms, {'attr': {'style': 'margin-top: 10px;'}}) }}
                 <button type="submit" style="padding: 10px 20px; background-color: #003366; color: white; border: none; border-radius: 5px; font-size: 1.2em; cursor: pointer;">
                     S'inscrire
                 </button>
-            </form>
+            {{ form_end(registrationForm) }}
         </div>
         <div class="card-footer text-center" style="padding: 15px; background-color: #F8F9FA;">
             <small style="font-size: 0.9em; color: #6c757d;">© 2025 NexusJobs</small>
         </div>
-        </div>
     </div>
 </div>
 {% endblock %}
-
