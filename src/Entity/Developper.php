@@ -266,6 +266,7 @@ class Developper
         $this->createdAt = $createdAt;
 
         return $this;
+    }
     public function isProfilePublic(): bool
     {
         return $this->getUserDevelopper()->getIsPublic();
