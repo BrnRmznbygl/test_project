@@ -39,6 +39,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'UserEntreprise', cascade: ['persist', 'remove'])]
     private ?Entreprise $entreprise = null;
 
+    #[ORM\Column]
+    private ?bool $isPublic = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -144,6 +147,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->entreprise = $entreprise;
+
+        return $this;
+    }
+
+    public function isPublic(): ?bool
+    {
+        return $this->isPublic;
+    }
+
+    public function setPublic(bool $isPublic): static
+    {
+        $this->isPublic = $isPublic;
 
         return $this;
     }

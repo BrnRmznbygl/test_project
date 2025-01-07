@@ -123,4 +123,8 @@ class Entreprise
 
         return $this;
     }
+    public function isProfilePublic(): bool
+    {
+        return $this->getUserEntreprise()->isPublic();
+    }
 }
