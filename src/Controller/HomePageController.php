@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\DeveloperProfileRepository;
+use App\Repository\DevelopperRepository;
 use App\Repository\JobPostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +21,8 @@ class HomePageController extends AbstractController
             // Redirige en fonction du rôle
             if ($this->isGranted('ROLE_COMPANY')) {
                 return $this->redirectToRoute('company_home');
-            } elseif ($this->isGranted('ROLE_DEVELOPER')) {
+            } elseif ($this->isGranted('ROLE_DEV')) {
+                
                 return $this->redirectToRoute('developer_home');
             }
         }
@@ -33,7 +34,7 @@ class HomePageController extends AbstractController
     }
 
     #[Route('/company/home', name: 'company_home')]
-    public function companyHome(DeveloperProfileRepository $developerRepo): Response
+    public function companyHome(DevelopperRepository $developerRepo): Response
     {
         // Récupérer les profils les plus consultés et les derniers profils créés
         $mostViewedProfiles = $developerRepo->findMostViewedProfiles(5);
@@ -48,7 +49,7 @@ class HomePageController extends AbstractController
     #[Route('/dev/home', name: 'developer_home')]
     public function developerHome(JobPostRepository $jobPostRepo): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_DEV');
+        
         // Récupérer les postes les plus populaires et les dernières offres publiées
         $mostViewedPosts = $jobPostRepo->findMostViewedPosts(5);
         $latestPosts = $jobPostRepo->findLatestPosts(3);

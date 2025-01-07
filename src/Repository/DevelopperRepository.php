@@ -16,28 +16,21 @@ class DevelopperRepository extends ServiceEntityRepository
         parent::__construct($registry, Developper::class);
     }
 
-    //    /**
-    //     * @return Developper[] Returns an array of Developper objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('d.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findMostViewedProfiles(int $limit): array
+    {
+        return $this->createQueryBuilder('d')
+            ->orderBy('d.views', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?Developper
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findLatestProfiles(int $limit): array
+    {
+        return $this->createQueryBuilder('d')
+            ->orderBy('d.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

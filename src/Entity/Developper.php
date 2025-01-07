@@ -29,6 +29,12 @@ class Developper
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $Localisation = null;
 
+    #[ORM\Column]
+    private int $views = 0;
+
+    #[ORM\Column(type: 'datetime')]
+    private $createdAt;
+
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
     private ?array $languages = null;
 
@@ -235,6 +241,29 @@ class Developper
     public function removeFavoriteDevelopper(self $favoriteDevelopper): static
     {
         $this->favoriteDeveloppers->removeElement($favoriteDevelopper);
+
+        return $this;
+    }
+
+    public function getViews(): ?int
+    {
+        return $this->views;
+    }
+
+    public function incrementViews(): static
+    {
+        $this->views++;
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
