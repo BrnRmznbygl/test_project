@@ -20,10 +20,10 @@ class Developper
     #[ORM\JoinColumn(nullable: false)]
     private ?User $UserDevelopper = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]

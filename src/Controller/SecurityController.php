@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Developper;
+use App\Entity\Entreprise;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -71,6 +73,15 @@ public function registerDev(
         $entityManager->persist($user);
         $entityManager->flush();
 
+        // Create and persist the Developper entity
+        $developper = new Developper();
+        $developper->setUserDevelopper($user);
+        $developper->setFirstName('DefaultFirstName');
+        $developper->setLastName('DefaultLastName');
+
+        $entityManager->persist($developper);
+        $entityManager->flush();
+
         return $this->redirectToRoute('app_login');
     }
 
@@ -100,9 +111,22 @@ public function registerDev(
     
             $entityManager->persist($user);
             $entityManager->flush();
+
+            //pour que le user soit un company
+            $entreprise1 = new Entreprise();
+            $entreprise1->setUserEntreprise($user);
+            $entreprise1->setName('DefaultCoName');
+
+
+            $entityManager->persist($entreprise1);
+            $entityManager->flush();
     
             return $this->redirectToRoute('app_login');
+
         }
+
+
+
     
         return $this->render('registration/company_register.html.twig', [
             'registrationForm' => $form->createView(),
