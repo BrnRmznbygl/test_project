@@ -38,6 +38,9 @@ class Developper
     #[ORM\Column(type: Types::ARRAY, nullable: true)]
     private ?array $languages = null;
 
+    #[ORM\Column(type: 'integer')]
+    private $experienceLevel=0;
+
     #[ORM\Column(nullable: true)]
     private ?float $minSalary = null;
 
@@ -70,6 +73,7 @@ class Developper
         $this->favoriteEntreprises = new ArrayCollection();
         $this->favoritePosts = new ArrayCollection();
         $this->favoriteDeveloppers = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -169,6 +173,18 @@ class Developper
     public function setAvatarUrl(?string $avatarUrl): static
     {
         $this->avatarUrl = $avatarUrl;
+
+        return $this;
+    }
+
+    public function getExperienceLevel(): ?int
+    {
+        return $this->experienceLevel;
+    }
+
+    public function setExperienceLevel(?int $experienceLevel): static
+    {
+        $this->experienceLevel = $experienceLevel;
 
         return $this;
     }

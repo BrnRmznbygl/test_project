@@ -23,6 +23,9 @@ class Post
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $Technologie = null;
 
+    #[ORM\Column(type: 'integer')]
+    private $experienceLevel;
+
     #[ORM\Column(nullable: true)]
     private ?float $salary = null;
 
