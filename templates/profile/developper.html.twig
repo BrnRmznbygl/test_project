@@ -3,19 +3,20 @@
 {% block title %}Profil Développeur{% endblock %}
 
 {% block body %}
-    <h1>Profil de {{ developper.firstName }} {{ developper.lastName }}</h1>
-    <p><strong>Localisation :</strong> {{ developper.localisation }}</p>
+    <div style="text-align: center;">
+        <h1>Profil de {{ developper.firstName }} {{ developper.lastName }}</h1>
+        <p><strong>Localisation :</strong> {{ developper.localisation }}</p>
 
-    {% if developper.isProfilePublic() %}
-        <p><strong>Langages :</strong> {{ developper.languages|join(', ') }}</p>
-        <p><strong>Min. Salaire :</strong> {{ developper.minSalary }} €</p>
-        <p><strong>Bio :</strong> {{ developper.bio }}</p>
-        <img src="{{ developper.avatarUrl }}" alt="Avatar de {{ developper.firstName }}">
-    {% else %}
-        <p>Ce profil est privé.</p>
-    {% endif %}
+        {% if developper.isProfilePublic() %}
+            <p><strong>Langages :</strong> {{ developper.languages|join(', ') }}</p>
+            <p><strong>Min. Salaire :</strong> {{ developper.minSalary }} €</p>
+            <p><strong>Bio :</strong> {{ developper.bio }}</p>
+            <img src="{{ developper.avatarUrl }}" alt="Avatar de {{ developper.firstName }}">
+        {% else %}
+            <p>Ce profil est privé.</p>
+        {% endif %}
 
-    <a href="{{ path('developper_list') }}">Retour à la liste des développeurs</a>
-    <br>
-    <a href="{{ path('homepage') }}">Retour</a>
+        <br>
+        <a href="{{ path('app_home') }}">Retour</a>
+    </div>
 {% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Profil Développeur{% endblock %}
+
+{% block body %}
+    <div style="text-align: center;">
+        <h1>Modifier Profil Développeur</h1>
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn">Enregistrer</button>
+        {{ form_end(form) }}
+
+        <a href="{{ path('developper_profile', {id: developper.id}) }}">Annuler</a>
+        <br>
+        <a href="{{ path('dev_home') }}" class="btn">Retour</a>
+    </div>
+{% endblock %}

@@ -3,17 +3,22 @@
 {% block title %}Accueil Développeur{% endblock %}
 
 {% block body %}
-    <h1>Postes les plus populaires</h1>
-    <ul>
-        {% for post in mostViewedPosts %}
-            <li>{{ post.title }} - {{ post.views }} vues</li>
-        {% endfor %}
-    </ul>
+    <div style="text-align: center;">
+        <h1>Postes les plus populaires</h1>
+        <ul>
+            {% for post in mostViewedPosts %}
+                <li>{{ post.title }} - {{ post.views }} vues</li>
+            {% endfor %}
+        </ul>
 
-    <h1>Dernières offres publiées</h1>
-    <ul>
-        {% for post in latestPosts %}
-            <li>{{ post.title }} - Publié le {{ post.createdAt|date('d/m/Y') }}</li>
-        {% endfor %}
-    </ul>
+        <h1>Dernières offres publiées</h1>
+        <ul>
+            {% for post in latestPosts %}
+                <li>{{ post.title }} - Publié le {{ post.createdAt|date('d/m/Y') }}</li>
+            {% endfor %}
+        </ul>
+
+        <a href="{{ path('developper_profile', {id: developper.id}) }}" class="btn">Voir Profil Développeur</a>
+        <a href="{{ path('developper_edit', {id: developper.id}) }}" class="btn">Modifier Profil</a>
+    </div>
 {% endblock %}
