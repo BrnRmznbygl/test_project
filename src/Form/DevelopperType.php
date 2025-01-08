@@ -8,6 +8,9 @@ use App\Entity\Post;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -32,16 +35,21 @@ class DevelopperType extends AbstractType
                     new Assert\NotBlank(),
                 ],
             ])
-            ->add('views')
-            ->add('createdAt', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('languages', null, [
+            ->add('languages', ChoiceType::class, [
+                'choices' => [
+                    'PHP' => 'php',
+                    'JavaScript' => 'javascript',
+                    'Python' => 'python',
+                    'Java' => 'java',
+                    'C++' => 'cpp',
+                    'Ruby' => 'ruby',
+                ],
+                'multiple' => true,
+                'expanded' => true,
                 'constraints' => [
                     new Assert\NotBlank(),
                 ],
             ])
-            ->add('experienceLevel')
             ->add('minSalary', null, [
                 'constraints' => [
                     new Assert\NotBlank(),
@@ -53,25 +61,6 @@ class DevelopperType extends AbstractType
                 'constraints' => [
                     new Assert\Url(),
                 ],
-            ])
-            ->add('UserDevelopper', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
-            ->add('favoriteEntreprises', EntityType::class, [
-                'class' => Entreprise::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
-            ->add('favoritePosts', EntityType::class, [
-                'class' => Post::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
-            ->add('favoriteDeveloppers', EntityType::class, [
-                'class' => Developper::class,
-                'choice_label' => 'id',
-                'multiple' => true,
             ])
         ;
     }
