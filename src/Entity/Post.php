@@ -48,10 +48,9 @@ class Post
         return $this->views;
     }
 
-    public function setViews(int $views): static
+    public function incrementViews(): static
     {
-        $this->views = $views;
-
+        $this->views = $this->views + 1;
         return $this;
     }
 

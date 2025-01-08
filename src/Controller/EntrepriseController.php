@@ -12,14 +12,15 @@ class EntrepriseController extends AbstractController
     #[Route('/profile/entreprise/{id}', name: 'entreprise_profile')]
     public function show(int $id, EntrepriseRepository $repository): Response
     {
-        $entreprise = $repository->find($id);
+        // Récupérer les développeurs les plus consultés
+        $mostViewedDeveloppers = $developperRepository->findMostViewedProfiles();
 
-        if (!$entreprise) {
-            throw $this->createNotFoundException('Entreprise not found');
-        }
-
-        return $this->render('profile/entreprise.html.twig', [
-            'entreprise' => $entreprise,
+        // Récupérer les derniers développeurs créés
+        $latestDeveloppers = $developperRepository->findLatestProfiles();
+  
+        return $this->render('entreprise/home.html.twig', [
+              'mostViewedDeveloppers' => $mostViewedDeveloppers,
+              'latestDeveloppers' => $latestDeveloppers,
         ]);
     }
 }
