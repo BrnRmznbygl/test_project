@@ -3,14 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Developper;
-use App\Entity\Entreprise;
-use App\Entity\Post;
-use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -43,6 +38,23 @@ class DevelopperType extends AbstractType
                     'Java' => 'java',
                     'C++' => 'cpp',
                     'Ruby' => 'ruby',
+                    'C#' => 'csharp',
+                    'Swift' => 'swift',
+                    'Go' => 'go',
+                    'Kotlin' => 'kotlin',
+                    'Rust' => 'rust',
+                    'TypeScript' => 'typescript',
+                    'Scala' => 'scala',
+                    'R' => 'r',
+                    'Objective-C' => 'objc',
+                    'Perl' => 'perl',
+                    'Shell' => 'shell',
+                    'HTML' => 'html',
+                    'CSS' => 'css',
+                    'SQL' => 'sql',
+                    'Bash' => 'bash',
+                    'PowerShell' => 'powershell',
+                    'Assembly' => 'assembly'
                 ],
                 'multiple' => true,
                 'expanded' => true,
@@ -61,6 +73,12 @@ class DevelopperType extends AbstractType
                 'constraints' => [
                     new Assert\Url(),
                 ],
+            ])
+            ->add('isPublic', CheckboxType::class, [
+                'label' => 'Profile Visibility',
+                'required' => false,
+                'mapped' => false,
+                'data' => $builder->getData()->getUserDevelopper()->isPublic(),
             ])
         ;
     }

@@ -7,7 +7,38 @@
         <h1>Modifier Profil Développeur</h1>
 
         {{ form_start(form) }}
-        {{ form_widget(form) }}
+        <div>
+            {{ form_label(form.firstName) }}
+            {{ form_widget(form.firstName) }}
+        </div>
+        <div>
+            {{ form_label(form.lastName) }}
+            {{ form_widget(form.lastName) }}
+        </div>
+        <div>
+            {{ form_label(form.localisation) }}
+            {{ form_widget(form.localisation) }}
+        </div>
+        <div>
+            {{ form_label(form.languages) }}
+            {{ form_widget(form.languages) }}
+        </div>
+        <div>
+            {{ form_label(form.minSalary) }}
+            {{ form_widget(form.minSalary) }}
+        </div>
+        <div>
+            {{ form_label(form.bio) }}
+            {{ form_widget(form.bio) }}
+        </div>
+        <div>
+            {{ form_label(form.avatarUrl) }}
+            {{ form_widget(form.avatarUrl) }}
+        </div>
+        <div>
+            {{ form_label(form.isPublic) }}
+            {{ form_widget(form.isPublic, {'attr': {'class': 'switch'}}) }}
+        </div>
         <button class="btn">Enregistrer</button>
         {{ form_end(form) }}
 

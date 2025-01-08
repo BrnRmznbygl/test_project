@@ -7,7 +7,7 @@
         <h1>Profil de {{ developper.firstName }} {{ developper.lastName }}</h1>
         <p><strong>Localisation :</strong> {{ developper.localisation }}</p>
 
-        {% if developper.isProfilePublic() %}
+        {% if developper.isProfilePublic() or app.user.id == developper.id %}
             <p><strong>Langages :</strong> {{ developper.languages|join(', ') }}</p>
             <p><strong>Min. Salaire :</strong> {{ developper.minSalary }} €</p>
             <p><strong>Bio :</strong> {{ developper.bio }}</p>

@@ -22,8 +22,6 @@ class DevelopperController extends AbstractController
             $entityManager->flush();
         }
 
-
-
         if (!$developper) {
             throw $this->createNotFoundException('Developper not found');
         }
@@ -41,6 +39,8 @@ class DevelopperController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $isPublic = $form->get('isPublic')->getData();
+            $developper->getUserDevelopper()->setPublic($isPublic);
             $entityManager->flush();
 
             return $this->redirectToRoute('developper_profile', ['id' => $developper->getId()]);
