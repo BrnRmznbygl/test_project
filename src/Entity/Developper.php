@@ -268,7 +268,7 @@ class Developper
 
     public function incrementViews(): static
     {
-        $this->views++;
+        $this->views= $this->views + 1;
         return $this;
     }
 

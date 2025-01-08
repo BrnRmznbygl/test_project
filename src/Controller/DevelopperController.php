@@ -14,9 +14,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class DevelopperController extends AbstractController
 {
     #[Route('/profile/developper/{id}', name: 'developper_profile')]
-    public function show(int $id, DevelopperRepository $repository): Response
+    public function show(int $id, DevelopperRepository $repository, EntityManagerInterface $entityManager): Response
     {
         $developper = $repository->find($id);
+        if($developper->getUserDevelopper() !== $this->getUser()) {
+            $developper->incrementViews();
+            $entityManager->flush();
+        }
+
+
 
         if (!$developper) {
             throw $this->createNotFoundException('Developper not found');
