@@ -127,4 +127,8 @@ class Entreprise
     {
         return $this->getUserEntreprise()->isPublic();
     }
+    public function __toString(): string
+    {
+        return $this->UserEntreprise ? $this->UserEntreprise->getEmail() : 'Entreprise';
+    }
 }

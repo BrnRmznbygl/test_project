@@ -16,6 +16,24 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
+    public function findMostViewedPosts(int $limit): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.views', 'DESC') // Assurez-vous que la colonne "views" existe dans votre table Post
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findLatestPosts(int $limit): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.createdAt', 'DESC') // Assurez-vous que "createdAt" est une propriété de l'entité Post
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Post[] Returns an array of Post objects
     //     */

@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\DevelopperRepository;
-use App\Repository\JobPostRepository;
+use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +22,6 @@ class HomePageController extends AbstractController
             if ($this->isGranted('ROLE_COMPANY')) {
                 return $this->redirectToRoute('company_home');
             } elseif ($this->isGranted('ROLE_DEV')) {
-                
                 return $this->redirectToRoute('developer_home');
             }
         }
@@ -47,12 +46,12 @@ class HomePageController extends AbstractController
     }
 
     #[Route('/dev/home', name: 'developer_home')]
-    public function developerHome(JobPostRepository $jobPostRepo): Response
+    public function developerHome(PostRepository $postRepository): Response
     {
         
         // Récupérer les postes les plus populaires et les dernières offres publiées
-        $mostViewedPosts = $jobPostRepo->findMostViewedPosts(5);
-        $latestPosts = $jobPostRepo->findLatestPosts(3);
+        $mostViewedPosts = $postRepository->findMostViewedPosts(5);
+        $latestPosts = $postRepository->findLatestPosts(3);
 
         return $this->render('home/dev_home.html.twig', [
             'mostViewedPosts' => $mostViewedPosts,

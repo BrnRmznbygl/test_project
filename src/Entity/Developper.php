@@ -285,6 +285,10 @@ class Developper
     }
     public function isProfilePublic(): bool
     {
-        return $this->getUserDevelopper()->getIsPublic();
+        return $this->getUserDevelopper()->isPublic();
+    }
+    public function __toString(): string
+    {
+        return $this->UserDevelopper ? $this->UserDevelopper->getEmail() : 'Developper';
     }
 }

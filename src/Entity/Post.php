@@ -36,6 +36,38 @@ class Post
     #[ORM\JoinColumn(nullable: false)]
     private ?Entreprise $entreprise = null;
 
+    #[ORM\Column(type: 'integer')]
+    private int $views = 0;
+
+    #[ORM\Column(type: 'datetime')]
+    private \DateTimeInterface $createdAt;
+
+// Getter et Setter pour "views"
+    public function getViews(): int
+    {
+        return $this->views;
+    }
+
+    public function setViews(int $views): static
+    {
+        $this->views = $views;
+
+        return $this;
+    }
+
+// Getter et Setter pour "createdAt"
+    public function getCreatedAt(): \DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

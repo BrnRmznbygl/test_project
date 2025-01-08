@@ -9,22 +9,6 @@ security:
                 property: email
 
     firewalls:
-        dev:
-            pattern: ^/dev
-            provider: app_user_provider
-            stateless: false
-            form_login:
-                login_path: app_login
-                check_path: app_login
-                enable_csrf: true
-            logout:
-                path: dev_logout
-                target: /login
-            remember_me:
-                secret: '%kernel.secret%'
-                lifetime: 604800
-                path: /
-
         main:
             lazy: true
             provider: app_user_provider
