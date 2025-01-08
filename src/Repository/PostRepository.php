@@ -34,6 +34,37 @@ class PostRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findMatchingPosts(array $criteria)
+    {
+        $qb = $this->createQueryBuilder('p');
+
+        // Correspondance sur les langages/technologies
+        if (!empty($criteria['languages'])) {
+            $qb->andWhere(':languages MEMBER OF p.Technologie')
+               ->setParameter('languages', $criteria['languages']);
+        }
+
+        // Correspondance sur la localisation
+        if (!empty($criteria['Localisation'])) {
+            $qb->andWhere('p.localisation = :localisation')
+               ->setParameter('localisation', $criteria['Localisation']);
+        }
+
+        // Correspondance sur le salaire
+        if (!empty($criteria['minSalary'])) {
+            $qb->andWhere('p.salary >= :minSalary')
+               ->setParameter('minSalary', $criteria['minSalary']);
+        }
+
+        // Correspondance sur le niveau d'expérience
+        if (!empty($criteria['experienceLevel'])) {
+            $qb->andWhere('p.experienceLevel = :experienceLevel')
+               ->setParameter('experienceLevel', $criteria['experienceLevel']);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
     //    /**
     //     * @return Post[] Returns an array of Post objects
     //     */
