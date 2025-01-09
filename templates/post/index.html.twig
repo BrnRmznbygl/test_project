@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des fiches de postes{% endblock %}
+
+{% block body %}
+<style>
+    .list-wrapper { 
+        margin: 1em auto; 
+        max-width: 800px; 
+        width: 95%; 
+        font: 18px/1.5 sans-serif; 
+        background-color: #f0f4f8; 
+        padding: 2em; 
+        border-radius: 10px; 
+        border: 1px solid #ddd;
+    }
+    .list-wrapper ul { 
+        list-style-type: none; 
+        padding: 0; 
+    }
+    .list-wrapper li { 
+        margin: 0.5em 0; 
+        padding: 0.5em; 
+        border: 1px solid #ddd; 
+        border-radius: 5px; 
+        background: #fff; 
+        display: flex; 
+        align-items: center;
+    }
+    .list-wrapper li::before {
+        content: "\2022"; /* Unicode for bullet point */
+        color: #007BFF; 
+        font-weight: bold; 
+        display: inline-block; 
+        width: 1em; 
+        margin-right: 0.5em; 
+    }
+    .list-wrapper a { 
+        margin-right: 1em; 
+        color: #007BFF; 
+        text-decoration: none; 
+        font-weight: bold; 
+        flex-grow: 1;
+    }
+    .list-wrapper a:hover { 
+        text-decoration: underline; 
+    }
+    .list-wrapper h1 { 
+        text-align: center; 
+        color: #333; 
+        margin-bottom: 1em; 
+    }
+    .create-button {
+        display: block;
+        text-align: center;
+        margin-top: 2em;
+    }
+    .create-button a {
+        padding: 0.5em 1em; 
+        background: #007BFF; 
+        color: white; 
+        border-radius: 5px; 
+        text-decoration: none;
+    }
+    .create-button a:hover {
+        background: #0056b3;
+    }
+</style>
+
+<div class="list-wrapper">
+    <h1>Liste des fiches de postes</h1>
+    <ul>
+        {% for post in posts %}
+            <li>
+                <a href="{{ path('page_post', {id: post.id}) }}">{{ post.title }}</a> - {{ post.localisation }}
+                
+                {% if app.user and app.user == post.entreprise.UserEntreprise %}
+                    <a href="{{ path('post_edit', {id: post.id}) }}">Modifier</a>
+                    <form method="post" action="{{ path('post_delete', {id: post.id}) }}" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ post.id) }}">
+                        <button type="submit" style="background: none; border: none; color: #dc3545; cursor: pointer; font-weight: bold;">Supprimer</button>
+                    </form>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+        <div class="create-button">
+            <a href="{{ path('post_new') }}">Créer un nouveau poste</a>
+        </div>
+</div>
+{% endblock %}

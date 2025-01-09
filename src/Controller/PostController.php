@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\User;
@@ -18,6 +17,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PostController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
     {
@@ -40,38 +46,42 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/post/new', name: 'post_new')] 
-    public function new(Request $request, EntityManagerInterface $entityManager): Response 
-    { 
+    #[Route('/post/new', name: 'post_new')]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
         $post = new Post();
-        $form = $this->createForm(PostType::class, $post); 
+        $form = $this->createForm(PostType::class, $post);
 
-        $form->handleRequest($request); 
-        if ($form->isSubmitted() && $form->isValid()) { 
-            // Récupérer l'entreprise sélectionnée dans le formulaire 
-            $entreprise = $this->getUser()->getEntreprise(); 
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entreprise = $this->getUser()->getEntreprise();
 
-            if ($entreprise) { 
-                $post->setEntreprise($entreprise); 
-                $entityManager->persist($post); 
-                $entityManager->flush(); 
+            if ($entreprise) {
+                $post->setEntreprise($entreprise);
+                $entityManager->persist($post);
+                $entityManager->flush();
 
-                return $this->redirectToRoute('post_success'); 
-            } 
-            else { 
-                // Gérer le cas où l'entreprise n'est pas trouvée 
-                $this->addFlash('error', 'Entreprise non trouvée.'); 
-            } 
-        } 
+                return $this->redirectToRoute('post_success');
+            } else {
+                $this->addFlash('error', 'Entreprise non trouvée.');
+            }
+        }
 
-        return $this->render('post/new.html.twig', [ 
-            'form' => $form->createView(), 
-        ]); 
+        return $this->render('post/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     #[Route('/post/edit/{id}', name: 'post_edit')]
     public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->security->getUser();
+        $entreprise = $post->getEntreprise();
+
+        if ($user !== $entreprise->getUserEntreprise()) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier ce post.');
+        }
+
         $form = $this->createForm(PostType::class, $post);
 
         $form->handleRequest($request);
@@ -106,6 +116,13 @@ class PostController extends AbstractController
     #[Route('/post/delete/{id}', name: 'post_delete')]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->security->getUser();
+        $entreprise = $post->getEntreprise();
+
+        if ($user !== $entreprise->getUserEntreprise()) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à supprimer ce post.');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->request->get('_token'))) {
             $entityManager->remove($post);
             $entityManager->flush();
@@ -113,11 +130,12 @@ class PostController extends AbstractController
 
         return $this->redirectToRoute('post_index');
     }
-    #[Route('/post/{id}', name: 'page_post')] 
-    public function show(Post $post): Response 
-    { 
-        return $this->render('post/show.html.twig', [ 
-            'post' => $post, 
+
+    #[Route('/post/{id}', name: 'page_post')]
+    public function show(Post $post): Response
+    {
+        return $this->render('post/show.html.twig', [
+            'post' => $post,
         ]);
-     }
-} 
+    }
+}
