@@ -6,13 +6,13 @@
         <div class="card-header text-center" style="background-color: #003366; padding: 20px;">
             <h1 style="color: white; font-size: 1.8em; margin: 0;">Inscription - Entreprise</h1>
         </div>
-        <div class="card-body">
-            {{ form_start(registrationForm, {'attr': {'style': 'display: flex; flex-direction: column; gap: 20px;'}}) }}
-                {{ form_row(registrationForm.email, {'attr': {'placeholder': "Email de l'entreprise", 'style': 'padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;'}}) }}
-                {{ form_row(registrationForm.plainPassword.first, {'attr': {'placeholder': 'Mot de passe', 'style': 'padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;'}}) }}
-                {{ form_row(registrationForm.plainPassword.second, {'attr': {'placeholder': 'Répétez votre mot de passe', 'style': 'padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;'}}) }}
-                {{ form_row(registrationForm.agreeTerms, {'attr': {'style': 'margin-top: 10px;'}}) }}
-                <button type="submit" style="padding: 10px 20px; background-color: #003366; color: white; border: none; border-radius: 5px; font-size: 1.2em; cursor: pointer;">
+        <div class="card-body" style="padding: 30px;">
+            {{ form_start(registrationForm, {'attr': {'style': 'display: flex; flex-direction: column; align-items: center; gap: 20px;'}}) }}
+                {{ form_row(registrationForm.email, {'attr': {'placeholder': "Email de l'entreprise", 'style': 'padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em; width: 100%;'}}) }}
+                {{ form_row(registrationForm.plainPassword.first, {'attr': {'placeholder': 'Mot de passe', 'style': 'padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em; width: 100%;'}}) }}
+                {{ form_row(registrationForm.plainPassword.second, {'attr': {'placeholder': 'Répétez votre mot de passe', 'style': 'padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em; width: 100%;'}}) }}
+                {{ form_row(registrationForm.agreeTerms, {'attr': {'style': 'margin-top: 20px;'}}) }}
+                <button type="submit" style="padding: 12px 25px; background-color: #003366; color: white; border: none; border-radius: 5px; font-size: 1.2em; cursor: pointer;">
                     S'inscrire
                 </button>
             {{ form_end(registrationForm) }}
