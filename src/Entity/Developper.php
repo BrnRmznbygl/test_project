@@ -41,7 +41,7 @@ class Developper
     private ?array $languages = null;
 
     #[ORM\Column(type: 'integer')]
-    private $experienceLevel=0;
+    private $experienceLevel = 0;
 
     #[ORM\Column(nullable: true)]
     private ?float $minSalary = null;
@@ -55,21 +55,18 @@ class Developper
     /**
      * @var Collection<int, Entreprise>
      */
-
     #[ORM\ManyToMany(targetEntity: Entreprise::class)]
     private Collection $favoriteEntreprises;
 
     /**
      * @var Collection<int, Post>
      */
-
     #[ORM\ManyToMany(targetEntity: Post::class)]
     private Collection $favoritePosts;
 
     /**
      * @var Collection<int, self>
      */
-
     #[ORM\ManyToMany(targetEntity: self::class)]
     private Collection $favoriteDeveloppers;
 
@@ -85,6 +82,7 @@ class Developper
     {
         return $this->id;
     }
+
     #[Ignore]
     public function getUserDevelopper(): ?User
     {
@@ -273,7 +271,7 @@ class Developper
 
     public function incrementViews(): static
     {
-        $this->views= $this->views + 1;
+        $this->views = $this->views + 1;
         return $this;
     }
 
@@ -288,10 +286,12 @@ class Developper
 
         return $this;
     }
+
     public function isProfilePublic(): bool
     {
         return $this->getUserDevelopper()->isPublic();
     }
+
     public function __toString(): string
     {
         return $this->UserDevelopper ? $this->UserDevelopper->getEmail() : 'Developper';

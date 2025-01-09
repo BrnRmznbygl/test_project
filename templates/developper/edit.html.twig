@@ -63,6 +63,7 @@
             <div class="mb-3">
                 {{ form_label(form.avatarUrl, 'Avatar', {'label_attr': {'class': 'form-label'}}) }}
                 {{ form_widget(form.avatarUrl, {'attr': {'class': 'form-control'}}) }}
+                <small class="form-text text-muted">Accepted file types: JPEG, PNG. Maximum size: 5MB.</small>
                 {% for error in form.avatarUrl.vars.errors %}
                     <div class="text-danger small">{{ error.message }}</div>
                 {% endfor %}

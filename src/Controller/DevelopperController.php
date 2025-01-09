@@ -56,6 +56,24 @@ class DevelopperController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $avatarFile */
+            $avatarFile = $form->get('avatarUrl')->getData();
+
+            if ($avatarFile) {
+                $newFilename = uniqid().'.'.$avatarFile->guessExtension();
+
+                try {
+                    $avatarFile->move(
+                        $this->getParameter('avatars_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // handle exception if something happens during file upload
+                }
+
+                $developper->setAvatarUrl($newFilename);
+            }
+
             $isPublic = $form->get('isPublic')->getData();
             $developper->getUserDevelopper()->setPublic($isPublic);
             $entityManager->flush();
