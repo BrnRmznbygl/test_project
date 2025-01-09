@@ -3,22 +3,31 @@
 {% block title %}Accueil Entreprise{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h1>Accueil Entreprise</h1>
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h1 class="display-4">Espace Entreprises</h1>
+            <p class="lead">Explorez les développeurs les plus populaires et découvrez les derniers talents inscrits.</p>
+        </div>
 
         <!-- Profils les plus consultés -->
-        <section>
-            <h2>Profils les plus consultés</h2>
-            <div class="row">
+        <section class="mb-5">
+            <h2 class="mb-4">✨ Profils les plus consultés</h2>
+            <div class="row g-4">
                 {% for developper in mostViewedProfiles %}
                     <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
+                        <div class="card shadow-sm">
+                            <div class="card-header text-center bg-primary text-white">
+                                <img src="{{ asset('uploads/avatars/' ~ developper.avatarUrl) }}"
+                                     alt="Avatar de {{ developper.firstName }}"
+                                     class="rounded-circle border"
+                                     style="width: 100px; height: 100px; object-fit: cover;">
+                            </div>
+                            <div class="card-body text-center">
                                 <h5 class="card-title">{{ developper.firstName }} {{ developper.lastName }}</h5>
-                                <p class="card-text">Localisation : {{ developper.Localisation }}</p>
-                                <p class="card-text">Langages : {{ developper.languages|join(', ') }}</p>
-                                <p class="card-text">Vues : {{ developper.views }}</p>
-                                <a href="{{ path('developper_profile', {'id': developper.id}) }}" class="btn btn-primary">Voir le profil</a>
+                                <p class="text-muted">{{ developper.Localisation }}</p>
+                                <p><strong>Langages :</strong> {{ developper.languages|join(', ') }}</p>
+                                <p><span class="badge bg-info text-dark">👀 {{ developper.views }} vues</span></p>
+                                <a href="{{ path('developper_profile', {'id': developper.id}) }}" class="btn btn-outline-primary">Voir le profil</a>
                             </div>
                         </div>
                     </div>
@@ -28,16 +37,22 @@
 
         <!-- Derniers profils créés -->
         <section>
-            <h2>Derniers profils créés</h2>
-            <div class="row">
+            <h2 class="mb-4">🆕 Derniers profils créés</h2>
+            <div class="row g-4">
                 {% for developper in latestProfiles %}
                     <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
+                        <div class="card shadow-sm">
+                            <div class="card-header text-center bg-secondary text-white">
+                                <img src="{{ asset('uploads/avatars/' ~ developper.avatarUrl) }}"
+                                     alt="Avatar de {{ developper.firstName }}"
+                                     class="rounded-circle border"
+                                     style="width: 100px; height: 100px; object-fit: cover;">
+                            </div>
+                            <div class="card-body text-center">
                                 <h5 class="card-title">{{ developper.firstName }} {{ developper.lastName }}</h5>
-                                <p class="card-text">Localisation : {{ developper.Localisation }}</p>
-                                <p class="card-text">Créé le : {{ developper.createdAt|date('d/m/Y') }}</p>
-                                <a href="{{ path('developper_profile', {'id': developper.id}) }}" class="btn btn-primary">Voir le profil</a>
+                                <p class="text-muted">{{ developper.Localisation }}</p>
+                                <p><strong>Créé le :</strong> {{ developper.createdAt|date('d/m/Y') }}</p>
+                                <a href="{{ path('developper_profile', {'id': developper.id}) }}" class="btn btn-outline-secondary">Voir le profil</a>
                             </div>
                         </div>
                     </div>
@@ -46,4 +61,3 @@
         </section>
     </div>
 {% endblock %}
-
