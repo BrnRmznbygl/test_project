@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Post;
 use App\Entity\Entreprise;
 use App\Form\PostType;
+use App\Repository\EntrepriseRepository;
 use App\Repository\PostRepository;
 use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -92,8 +93,13 @@ class PostController extends AbstractController
         return $this->redirectToRoute('post_index');
     }
     #[Route('company/post/{id}', name: 'page_post')] 
-    public function show(Post $post): Response 
-    { 
+    public function show(Post $post, EntrepriseRepository $repository, EntityManagerInterface $entityManager): Response
+    {
+        $entreprise = $post->getEntreprise();
+        if($entreprise->getUserEntreprise() !== $this->getUser()){
+            $post->incrementViews();
+            $entityManager->flush();
+        }
         return $this->render('post/show.html.twig', [ 
             'post' => $post, 
         ]);

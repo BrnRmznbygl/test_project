@@ -60,6 +60,7 @@ class DevelopperController extends AbstractController
             $developper->getUserDevelopper()->setPublic($isPublic);
             $entityManager->flush();
 
+
             return $this->redirectToRoute('developper_profile', ['id' => $developper->getId()]);
         }
 
