@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: EntrepriseRepository::class)]
 class Entreprise
@@ -33,6 +34,7 @@ class Entreprise
 
     #[ORM\OneToOne(inversedBy: 'entreprise', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Ignore]
     private ?User $UserEntreprise = null;
 
 
@@ -111,7 +113,7 @@ class Entreprise
 
         return $this;
     }
-
+    #[Ignore]
     public function getUserEntreprise(): ?User
     {
         return $this->UserEntreprise;

@@ -23,4 +23,17 @@ class EntrepriseController extends AbstractController
               'latestDeveloppers' => $latestDeveloppers,
         ]);
     }
+
+    #[Route('/company/serialize', name: 'company_serialize')]
+    public function serialize(): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('You must be logged in to extract this profile.');
+        }
+
+        $entreprise = $user->getEntreprise();
+        return $this->json($entreprise);
+    }
 }
