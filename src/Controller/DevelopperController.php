@@ -32,10 +32,25 @@ class DevelopperController extends AbstractController
     }
 
     #[Route('/developper/edit/{id}', name: 'developper_edit')]
-    public function edit(Request $request, Developper $developper, EntityManagerInterface $entityManager): Response
+    public function edit(int $id, Request $request, DevelopperRepository $repository, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(DevelopperType::class, $developper);
+        $user = $this->getUser();
 
+        if (!$user) {
+            throw $this->createAccessDeniedException('You must be logged in to edit this profile.');
+        }
+
+        $developper = $repository->find($id);
+
+        if (!$developper) {
+            throw $this->createNotFoundException('Developper not found');
+        }
+
+        if ($developper->getUserDevelopper() !== $user) {
+            throw $this->createAccessDeniedException('You do not have permission to edit this profile.');
+        }
+
+        $form = $this->createForm(DevelopperType::class, $developper);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -51,6 +66,7 @@ class DevelopperController extends AbstractController
             'developper' => $developper,
         ]);
     }
+
 
     #[Route('/dev/home', name: 'dev_home')]
     public function index(DevelopperRepository $repository): Response
