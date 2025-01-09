@@ -1,20 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PostController!{% endblock %}
+{% block title %}Liste des fiches de postes{% endblock %}
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .list-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .list-wrapper ul { list-style-type: none; padding: 0; }
+    .list-wrapper li { margin: 0.5em 0; }
+    .list-wrapper a { margin-right: 1em; }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
+<div class="list-wrapper">
+    <h1>Liste des fiches de postes</h1>
     <ul>
-        <li>Your controller at <code>/var/www/test_project/src/Controller/PostController.php</code></li>
-        <li>Your template at <code>/var/www/test_project/templates/post/index.html.twig</code></li>
+        {% for post in posts %}
+            <li>
+                <a href="{{ path('page_post', {id: post.id}) }}">{{ post.title }}</a> - {{ post.localisation }}
+                <a href="{{ path('post_edit', {id: post.id}) }}">Modifier</a>
+                <form method="post" action="{{ path('post_delete', {id: post.id}) }}" style="display:inline;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ post.id) }}">
+                    <button type="submit">Supprimer</button>
+                </form>
+            </li>
+        {% endfor %}
     </ul>
+    <a href="{{ path('post_new') }}">Créer un nouveau poste</a>
 </div>
 {% endblock %}
