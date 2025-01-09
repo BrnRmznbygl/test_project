@@ -71,12 +71,17 @@ class DevelopperController extends AbstractController
     #[Route('/dev/home', name: 'dev_home')]
     public function index(DevelopperRepository $repository): Response
     {
-        // Fetch the developper entity from the database
-        $developper = $repository->find(1); // Replace 1 with the appropriate ID
+        $user = $this->getUser(); // Get the logged-in user
 
-        // Check if the developper entity was found
+        if (!$user) {
+            throw $this->createAccessDeniedException('You must be logged in to access this page.');
+        }
+
+        // Find the Developper entity associated with the logged-in user
+        $developper = $repository->findOneBy(['UserDevelopper' => $user]);
+
         if (!$developper) {
-            throw $this->createNotFoundException('No developper found for id 1');
+            throw $this->createNotFoundException('No developper profile found for the logged-in user.');
         }
 
         // Fetch most viewed posts and latest posts (replace with actual logic)
