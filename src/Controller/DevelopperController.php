@@ -60,6 +60,7 @@ class DevelopperController extends AbstractController
             $avatarFile = $form->get('avatarUrl')->getData();
 
             if ($avatarFile) {
+                $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $newFilename = uniqid().'.'.$avatarFile->guessExtension();
 
                 try {

@@ -19,33 +19,33 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PostController extends AbstractController
 {
-    #[Route('company/post/new', name: 'post_new')] 
-    public function new(Request $request, EntityManagerInterface $entityManager): Response 
-    { 
+    #[Route('company/post/new', name: 'post_new')]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
         $post = new Post();
-        $form = $this->createForm(PostType::class, $post); 
+        $form = $this->createForm(PostType::class, $post);
 
-        $form->handleRequest($request); 
-        if ($form->isSubmitted() && $form->isValid()) { 
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             // Récupérer l'entreprise sélectionnée dans le formulaire 
-            $entreprise = $this->getUser()->getEntreprise(); 
+            $entreprise = $this->getUser()->getEntreprise();
 
-            if ($entreprise) { 
-                $post->setEntreprise($entreprise); 
-                $entityManager->persist($post); 
-                $entityManager->flush(); 
+            if ($entreprise) {
+                $post->setEntreprise($entreprise);
+                $entityManager->persist($post);
+                $entityManager->flush();
 
-                return $this->redirectToRoute('post_success'); 
-            } 
-            else { 
+                return $this->redirectToRoute('post_success');
+            }
+            else {
                 // Gérer le cas où l'entreprise n'est pas trouvée 
-                $this->addFlash('error', 'Entreprise non trouvée.'); 
-            } 
-        } 
+                $this->addFlash('error', 'Entreprise non trouvée.');
+            }
+        }
 
-        return $this->render('post/new.html.twig', [ 
-            'form' => $form->createView(), 
-        ]); 
+        return $this->render('post/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     #[Route('company/post/edit/{id}', name: 'post_edit')]
@@ -92,7 +92,8 @@ class PostController extends AbstractController
 
         return $this->redirectToRoute('post_index');
     }
-    #[Route('company/post/{id}', name: 'page_post')] 
+
+    #[Route('company/post/{id}', name: 'page_post')]
     public function show(Post $post, EntrepriseRepository $repository, EntityManagerInterface $entityManager): Response
     {
         $entreprise = $post->getEntreprise();
@@ -100,8 +101,8 @@ class PostController extends AbstractController
             $post->incrementViews();
             $entityManager->flush();
         }
-        return $this->render('post/show.html.twig', [ 
-            'post' => $post, 
+        return $this->render('post/show.html.twig', [
+            'post' => $post,
         ]);
-     }
-} 
+    }
+}

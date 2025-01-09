@@ -6,7 +6,6 @@ use App\Entity\Post;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -33,7 +32,6 @@ class PostType extends AbstractType
             ])
             ->add('salary', MoneyType::class, ['label' => 'Salaire proposé'])
             ->add('detail', TextareaType::class, ['label' => 'Description détaillée'])
-            ->add('createdAt', DateTimeType::class, ['widget' => 'single_text', 'label' => 'Date de création'])
             ->add('entreprise', EntityType::class, [
                 'class' => Entreprise::class,
                 'choice_label' => 'name',
