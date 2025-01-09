@@ -18,29 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PostController extends AbstractController
 {
-    #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
-    {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $plainPassword = $form->get('plainPassword')->getData();
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_login');
-        }
-
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form,
-        ]);
-    }
-
-    #[Route('/post/new', name: 'post_new')] 
+    #[Route('company/post/new', name: 'post_new')] 
     public function new(Request $request, EntityManagerInterface $entityManager): Response 
     { 
         $post = new Post();
@@ -69,7 +47,7 @@ class PostController extends AbstractController
         ]); 
     }
 
-    #[Route('/post/edit/{id}', name: 'post_edit')]
+    #[Route('company/post/edit/{id}', name: 'post_edit')]
     public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(PostType::class, $post);
@@ -87,13 +65,13 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/post/success', name: 'post_success')]
+    #[Route('company/post/success', name: 'post_success')]
     public function success(): Response
     {
         return $this->render('post/success.html.twig');
     }
 
-    #[Route('/post', name: 'post_index')]
+    #[Route('company/post', name: 'post_index')]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $posts = $entityManager->getRepository(Post::class)->findAll();
@@ -103,7 +81,7 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/post/delete/{id}', name: 'post_delete')]
+    #[Route('company/post/delete/{id}', name: 'post_delete')]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->request->get('_token'))) {
@@ -113,7 +91,7 @@ class PostController extends AbstractController
 
         return $this->redirectToRoute('post_index');
     }
-    #[Route('/post/{id}', name: 'page_post')] 
+    #[Route('company/post/{id}', name: 'page_post')] 
     public function show(Post $post): Response 
     { 
         return $this->render('post/show.html.twig', [ 
