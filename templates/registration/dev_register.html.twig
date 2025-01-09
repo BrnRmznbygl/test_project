@@ -2,17 +2,17 @@
 
 {% block body %}
 <div class="container-fluid" style="background-image: url('/images/Background-home.jpg'); background-size: cover; background-position: center; height: 100vh; display: flex; align-items: center; justify-content: center;">
-    <div class="card" style="max-width: 450px; width: 100%; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); border-radius: 15px; overflow: hidden; background-color: rgba(255, 255, 255, 0.95);">
+    <div class="card" style="max-width: 400px; width: 100%; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); border-radius: 15px; overflow: hidden; background-color: rgba(255, 255, 255, 0.95);">
         <div class="card-header text-center" style="background-color: #4B0082; padding: 20px;">
             <h1 style="color: white; font-size: 1.8em; margin: 0;">Inscription - Développeur·se</h1>
         </div>
-        <div class="card-body">
-            {{ form_start(registrationForm, {'attr': {'style': 'display: flex; flex-direction: column; gap: 20px;'}}) }}
-                {{ form_row(registrationForm.email, {'attr': {'placeholder': 'Votre email', 'style': 'padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;'}}) }}
-                {{ form_row(registrationForm.plainPassword.first, {'attr': {'placeholder': 'Votre mot de passe', 'style': 'padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;'}}) }}
-                {{ form_row(registrationForm.plainPassword.second, {'attr': {'placeholder': 'Répétez votre mot de passe', 'style': 'padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;'}}) }}
-                {{ form_row(registrationForm.agreeTerms, {'attr': {'style': 'margin-top: 10px;'}}) }}
-                <button type="submit" style="padding: 10px 20px; background-color: #4B0082; color: white; border: none; border-radius: 5px; font-size: 1.2em; cursor: pointer;">
+        <div class="card-body" style="padding: 30px;">
+            {{ form_start(registrationForm, {'attr': {'style': 'display: flex;align-items: center; flex-direction: column; gap: 15px;'}}) }}
+                {{ form_row(registrationForm.email, {'attr': {'placeholder': 'Votre email', 'style': 'padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;'}}) }}
+                {{ form_row(registrationForm.plainPassword.first, {'attr': {'placeholder': 'Votre mot de passe', 'style': 'padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;'}}) }}
+                {{ form_row(registrationForm.plainPassword.second, {'attr': {'placeholder': 'Répétez votre mot de passe', 'style': 'padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em;'}}) }}
+                {{ form_row(registrationForm.agreeTerms, {'attr': {'style': 'margin-top: 20px;'}}) }}
+                <button type="submit" style="padding: 12px 25px; background-color: #4B0082; color: white; border: none; border-radius: 5px; font-size: 1.2em; cursor: pointer;">
                     S'inscrire
                 </button>
             {{ form_end(registrationForm) }}

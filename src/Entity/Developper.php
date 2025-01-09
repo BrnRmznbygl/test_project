@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: DevelopperRepository::class)]
 class Developper
@@ -18,6 +19,7 @@ class Developper
 
     #[ORM\OneToOne(inversedBy: 'developper', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Ignore]
     private ?User $UserDevelopper = null;
 
     #[ORM\Column(length: 255)]
@@ -53,18 +55,21 @@ class Developper
     /**
      * @var Collection<int, Entreprise>
      */
+
     #[ORM\ManyToMany(targetEntity: Entreprise::class)]
     private Collection $favoriteEntreprises;
 
     /**
      * @var Collection<int, Post>
      */
+
     #[ORM\ManyToMany(targetEntity: Post::class)]
     private Collection $favoritePosts;
 
     /**
      * @var Collection<int, self>
      */
+
     #[ORM\ManyToMany(targetEntity: self::class)]
     private Collection $favoriteDeveloppers;
 
@@ -80,7 +85,7 @@ class Developper
     {
         return $this->id;
     }
-
+    #[Ignore]
     public function getUserDevelopper(): ?User
     {
         return $this->UserDevelopper;

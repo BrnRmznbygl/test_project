@@ -3,16 +3,84 @@
 {% block title %}Modifier Profil Développeur{% endblock %}
 
 {% block body %}
-    <div style="text-align: center;">
-        <h1>Modifier Profil Développeur</h1>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h1 class="display-4">Modifier Profil Développeur</h1>
+        </div>
 
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button class="btn">Enregistrer</button>
-        {{ form_end(form) }}
+        <div class="card shadow-sm p-4">
+            {{ form_start(form) }}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.firstName, 'Prénom', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.firstName, {'attr': {'class': 'form-control'}}) }}
+                    {% for error in form.firstName.vars.errors %}
+                        <div class="text-danger small">{{ error.message }}</div>
+                    {% endfor %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.lastName, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.lastName, {'attr': {'class': 'form-control'}}) }}
+                    {% for error in form.lastName.vars.errors %}
+                        <div class="text-danger small">{{ error.message }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.localisation, 'Localisation', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.localisation, {'attr': {'class': 'form-control'}}) }}
+                    {% for error in form.localisation.vars.errors %}
+                        <div class="text-danger small">{{ error.message }}</div>
+                    {% endfor %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.languages, 'Langages', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.languages, {'attr': {'class': 'form-control'}}) }}
+                    {% for error in form.languages.vars.errors %}
+                        <div class="text-danger small">{{ error.message }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.minSalary, 'Salaire Minimum', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.minSalary, {'attr': {'class': 'form-control'}}) }}
+                    {% for error in form.minSalary.vars.errors %}
+                        <div class="text-danger small">{{ error.message }}</div>
+                    {% endfor %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.bio, 'Biographie', {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.bio, {'attr': {'class': 'form-control', 'rows': 3}}) }}
+                    {% for error in form.bio.vars.errors %}
+                        <div class="text-danger small">{{ error.message }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="mb-3">
+                {{ form_label(form.avatarUrl, 'Avatar', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.avatarUrl, {'attr': {'class': 'form-control'}}) }}
+                {% for error in form.avatarUrl.vars.errors %}
+                    <div class="text-danger small">{{ error.message }}</div>
+                {% endfor %}
+            </div>
+            <div class="form-check form-switch mb-4">
+                {{ form_widget(form.isPublic, {'attr': {'class': 'form-check-input'}}) }}
+                {{ form_label(form.isPublic, 'Rendre le profil public', {'label_attr': {'class': 'form-check-label'}}) }}
+                {% for error in form.isPublic.vars.errors %}
+                    <div class="text-danger small">{{ error.message }}</div>
+                {% endfor %}
+            </div>
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <a href="{{ path('developper_profile', {id: developper.id}) }}" class="btn btn-secondary">Annuler</a>
+            </div>
+            {{ form_end(form) }}
+        </div>
 
-        <a href="{{ path('developper_profile', {id: developper.id}) }}">Annuler</a>
-        <br>
-        <a href="{{ path('dev_home') }}" class="btn">Retour</a>
+        <div class="text-center mt-4">
+            <a href="{{ path('dev_home') }}" class="btn btn-outline-primary">Retour à l'accueil</a>
+        </div>
     </div>
 {% endblock %}

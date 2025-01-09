@@ -9,7 +9,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class DevelopperController extends AbstractController
 {
@@ -22,8 +24,6 @@ class DevelopperController extends AbstractController
             $entityManager->flush();
         }
 
-
-
         if (!$developper) {
             throw $this->createNotFoundException('Developper not found');
         }
@@ -34,13 +34,30 @@ class DevelopperController extends AbstractController
     }
 
     #[Route('/developper/edit/{id}', name: 'developper_edit')]
-    public function edit(Request $request, Developper $developper, EntityManagerInterface $entityManager): Response
+    public function edit(int $id, Request $request, DevelopperRepository $repository, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(DevelopperType::class, $developper);
+        $user = $this->getUser();
 
+        if (!$user) {
+            throw $this->createAccessDeniedException('You must be logged in to edit this profile.');
+        }
+
+        $developper = $repository->find($id);
+
+        if (!$developper) {
+            throw $this->createNotFoundException('Developper not found');
+        }
+
+        if ($developper->getUserDevelopper() !== $user) {
+            throw $this->createAccessDeniedException('You do not have permission to edit this profile.');
+        }
+
+        $form = $this->createForm(DevelopperType::class, $developper);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $isPublic = $form->get('isPublic')->getData();
+            $developper->getUserDevelopper()->setPublic($isPublic);
             $entityManager->flush();
 
             return $this->redirectToRoute('developper_profile', ['id' => $developper->getId()]);
@@ -52,15 +69,21 @@ class DevelopperController extends AbstractController
         ]);
     }
 
+
     #[Route('/dev/home', name: 'dev_home')]
     public function index(DevelopperRepository $repository): Response
     {
-        // Fetch the developper entity from the database
-        $developper = $repository->find(1); // Replace 1 with the appropriate ID
+        $user = $this->getUser(); // Get the logged-in user
 
-        // Check if the developper entity was found
+        if (!$user) {
+            throw $this->createAccessDeniedException('You must be logged in to access this page.');
+        }
+
+        // Find the Developper entity associated with the logged-in user
+        $developper = $repository->findOneBy(['UserDevelopper' => $user]);
+
         if (!$developper) {
-            throw $this->createNotFoundException('No developper found for id 1');
+            throw $this->createNotFoundException('No developper profile found for the logged-in user.');
         }
 
         // Fetch most viewed posts and latest posts (replace with actual logic)
@@ -73,5 +96,19 @@ class DevelopperController extends AbstractController
             'mostViewedPosts' => $mostViewedPosts,
             'latestPosts' => $latestPosts,
         ]);
+    }
+    #[Route('dev/serialize', name: 'dev_serialize')]
+    public function serialize(): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('You must be logged in to extract this profile.');
+        }
+
+        $developper = $user->getDevelopper();
+        return $this->json($developper);
+
+
     }
 }

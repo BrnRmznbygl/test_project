@@ -12,14 +12,28 @@ class EntrepriseController extends AbstractController
     #[Route('/profile/entreprise/{id}', name: 'entreprise_profile')]
     public function show(int $id, EntrepriseRepository $repository): Response
     {
-        $entreprise = $repository->find($id);
+        // Récupérer les développeurs les plus consultés
+        $mostViewedDeveloppers = $developperRepository->findMostViewedProfiles();
 
-        if (!$entreprise) {
-            throw $this->createNotFoundException('Entreprise not found');
+        // Récupérer les derniers développeurs créés
+        $latestDeveloppers = $developperRepository->findLatestProfiles();
+  
+        return $this->render('entreprise/home.html.twig', [
+              'mostViewedDeveloppers' => $mostViewedDeveloppers,
+              'latestDeveloppers' => $latestDeveloppers,
+        ]);
+    }
+
+    #[Route('/company/serialize', name: 'company_serialize')]
+    public function serialize(): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('You must be logged in to extract this profile.');
         }
 
-        return $this->render('profile/entreprise.html.twig', [
-            'entreprise' => $entreprise,
-        ]);
+        $entreprise = $user->getEntreprise();
+        return $this->json($entreprise);
     }
 }
