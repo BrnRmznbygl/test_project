@@ -15,7 +15,7 @@
             left: 10px;
             z-index: 100;
         }
-
+    
         .dropdown-toggle {
             display: inline-flex;
             align-items: center;
@@ -25,47 +25,49 @@
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
-
+    
         .dropdown-toggle:hover {
             background-color: #00509e; /* Effet de survol */
         }
-
+    
         .dropdown-toggle img {
             max-height: 60px;
             transition: transform 0.3s ease;
         }
-
+    
         .dropdown-toggle:hover img {
             transform: scale(1.1); /* Zoom léger du logo au survol */
         }
-
+    
         /* Style du menu déroulant */
         .dropdown-menu {
             border-radius: 5px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
             border: 1px solid #ddd;
+            background-color: #696969; /* Même couleur que le bouton */
         }
-
+    
         .dropdown-item {
             font-size: 1em;
             padding: 10px 20px;
             transition: background-color 0.2s ease;
+            color: white; /* Couleur du texte pour contraster avec le fond sombre */
         }
-
+    
         .dropdown-item:hover {
-            background-color: #f1f1f1; /* Fond au survol */
+            background-color: #505050; /* Fond légèrement plus sombre au survol */
         }
-
+    
         /* Personnalisation du texte du menu */
         .dropdown-item:focus, .dropdown-item:hover {
-            color: #003366; /* Couleur de texte au survol */
+            color: white; /* Conserve le texte en blanc au survol */
         }
         /* Error message style */
         .error-message {
             color: red;
         }
     </style>
-    {% endblock %}
+    {% endblock %}    
 </head>
 <body style="margin: 0; padding: 0;">
     <!-- Logo avec menu déroulant -->
@@ -75,7 +77,14 @@
         </a>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
             <li><a class="dropdown-item" href="{{ path('app_home') }}">Accueil</a></li>
-            <li><a class="dropdown-item" href="{{ path('app_logout') }}">Connexion/Déconnexion</a></li>
+            {% if app.user and developper is defined %}
+                <li><a class="dropdown-item" href="{{ path('developper_edit', {'id': developper.id}) }}">Personnalisation</a></li>
+            {% endif %}
+            <li>
+                <a class="dropdown-item" href="{{ app.user ? path('app_logout') : path('app_login') }}">
+                    {{ app.user ? 'Déconnexion' : 'Connexion' }}
+                </a>
+            </li>
         </ul>
     </div>
 
