@@ -11,7 +11,12 @@
 
         <!-- Button to Les offres de postes -->
         <div class="text-end mb-4">
-            <a href="http://localhost:8000/company/post" class="btn btn-primary">Les offres de postes</a>
+            <a href="{{ path('post_index') }}" class="btn btn-primary">Les offres de postes</a>
+        </div>
+
+        <!-- Button to Recherche Développeur -->
+        <div class="text-end mb-4">
+            <a href="{{ path('search_developper') }}" class="btn btn-secondary">Recherche Développeur</a>
         </div>
 
         <!-- Profils les plus consultés -->
