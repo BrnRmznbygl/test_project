@@ -53,12 +53,6 @@ class Developper
     private ?string $avatarUrl = null;
 
     /**
-     * @var Collection<int, Entreprise>
-     */
-    #[ORM\ManyToMany(targetEntity: Entreprise::class)]
-    private Collection $favoriteEntreprises;
-
-    /**
      * @var Collection<int, Post>
      */
     #[ORM\ManyToMany(targetEntity: Post::class)]
@@ -72,7 +66,6 @@ class Developper
 
     public function __construct()
     {
-        $this->favoriteEntreprises = new ArrayCollection();
         $this->favoritePosts = new ArrayCollection();
         $this->favoriteDeveloppers = new ArrayCollection();
         $this->createdAt = new \DateTime();
@@ -188,30 +181,6 @@ class Developper
     public function setExperienceLevel(?int $experienceLevel): static
     {
         $this->experienceLevel = $experienceLevel;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Entreprise>
-     */
-    public function getFavoriteEntreprises(): Collection
-    {
-        return $this->favoriteEntreprises;
-    }
-
-    public function addFavoriteEntreprise(Entreprise $favoriteEntreprise): static
-    {
-        if (!$this->favoriteEntreprises->contains($favoriteEntreprise)) {
-            $this->favoriteEntreprises->add($favoriteEntreprise);
-        }
-
-        return $this;
-    }
-
-    public function removeFavoriteEntreprise(Entreprise $favoriteEntreprise): static
-    {
-        $this->favoriteEntreprises->removeElement($favoriteEntreprise);
 
         return $this;
     }

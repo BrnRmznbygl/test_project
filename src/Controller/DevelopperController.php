@@ -111,6 +111,7 @@ class DevelopperController extends AbstractController
             'developper' => $developper,
             'mostViewedPosts' => $mostViewedPosts,
             'latestPosts' => $latestPosts,
+            'profileViews' => $developper->getViews(),
         ]);
     }
     
@@ -152,4 +153,5 @@ class DevelopperController extends AbstractController
             'developers' => $developers,
         ]);
     }
+
 }
