@@ -15,9 +15,29 @@
             border: 1px solid #ddd;
         }
         .post-wrapper h1 {
-            text-align: center;
+            text-align: left;
             color: #333;
             margin-bottom: 1em;
+        }
+        .post-wrapper .title-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1em;
+        }
+        .post-wrapper .title-actions h1 {
+            margin: 0; /* Retirer la marge du titre */
+        }
+        .post-wrapper .title-actions a {
+            background: #007BFF;
+            color: white;
+            padding: 0.5em 1em;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .post-wrapper .title-actions a:hover {
+            text-decoration: underline;
         }
         .post-wrapper p {
             margin: 0.5em 0;
@@ -58,7 +78,13 @@
     </style>
 
     <div class="post-wrapper">
-        <h1>{{ post.title }}</h1>
+        <div class="title-actions">
+            <h1>{{ post.title }}</h1>
+            {% if is_granted('ROLE_COMPANY') %}
+                <a href="{{ path('company_suggestions', {'id': post.id}) }}">devMatching</a>
+            {% endif %}
+        </div>
+
         <p><strong>Localisation :</strong> {{ post.localisation }}</p>
         <p><strong>Technologies :</strong> {{ post.technologie|join(', ') }}</p>
         <p><strong>Niveau d'expérience :</strong> {{ post.experienceLevel }}</p>
