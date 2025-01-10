@@ -37,7 +37,7 @@ class Developper
     #[ORM\Column(type: 'datetime')]
     private $createdAt;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $languages = null;
 
     #[ORM\Column(type: 'integer')]
