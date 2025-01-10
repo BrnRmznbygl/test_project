@@ -1,12 +1,13 @@
 <?php
+
 namespace App\Form;
 
-use App\Entity\Entreprise;
 use App\Entity\Post;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Entreprise;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,7 +20,36 @@ class PostType extends AbstractType
         $builder
             ->add('title', TextType::class, ['label' => 'Titre du poste'])
             ->add('localisation', TextType::class, ['label' => 'Localisation'])
-            ->add('technologie', TextType::class, ['label' => 'Technologies recherchées'])
+            ->add('technologie', ChoiceType::class, [
+                'choices' => [
+                    'PHP' => 'php',
+                    'JavaScript' => 'javascript',
+                    'Python' => 'python',
+                    'Java' => 'java',
+                    'C++' => 'cpp',
+                    'Ruby' => 'ruby',
+                    'C#' => 'csharp',
+                    'Swift' => 'swift',
+                    'Go' => 'go',
+                    'Kotlin' => 'kotlin',
+                    'Rust' => 'rust',
+                    'TypeScript' => 'typescript',
+                    'Scala' => 'scala',
+                    'R' => 'r',
+                    'Objective-C' => 'objc',
+                    'Perl' => 'perl',
+                    'Shell' => 'shell',
+                    'HTML' => 'html',
+                    'CSS' => 'css',
+                    'SQL' => 'sql',
+                    'Bash' => 'bash',
+                    'PowerShell' => 'powershell',
+                    'Assembly' => 'assembly'
+                ],
+                'multiple' => true,
+                'expanded' => true,
+                'label' => 'Technologies recherchées'
+            ])
             ->add('experienceLevel', ChoiceType::class, [
                 'choices' => [
                     'Débutant' => 1,

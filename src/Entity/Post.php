@@ -20,8 +20,8 @@ class Post
     #[ORM\Column(length: 255)]
     private ?string $localisation = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $Technologie = null;
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private ?array $Technologie = null;
 
     #[ORM\Column(type: 'integer')]
     private $experienceLevel;
@@ -94,12 +94,12 @@ class Post
         return $this;
     }
 
-    public function getTechnologie(): ?string
+    public function getTechnologie(): ?array
     {
         return $this->Technologie;
     }
 
-    public function setTechnologie(?string $Technologie): static
+    public function setTechnologie(?array $Technologie): static
     {
         $this->Technologie = $Technologie;
 
