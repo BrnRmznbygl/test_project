@@ -93,7 +93,9 @@
             {% endif %}
             <li><a class="dropdown-item" href="{{ path('search_developper') }}">Recherche Développeurs</a></li>
             <li><a class="dropdown-item" href="{{ path('search_post') }}">Recherche Offre d'emplois</a></li>
+            {% if app.user is defined %}
             <li><a class="dropdown-item" href="{{ path('dashboard') }}">Dashboard</a></li>
+             {% endif %}
             <li>
                 <a class="dropdown-item" href="{{ app.user ? path('app_logout') : path('app_login') }}">
                     {{ app.user ? 'Déconnexion' : 'Connexion' }}
