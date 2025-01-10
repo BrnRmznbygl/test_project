@@ -64,4 +64,44 @@ class DevelopperRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+    // src/Repository/DevelopperRepository.php
+
+    public function findBySearchCriteria(array $criteria)
+    {
+        $qb = $this->createQueryBuilder('d');
+
+        if (!empty($criteria['firstName'])) {
+            $qb->andWhere('d.firstName LIKE :firstName')
+                ->setParameter('firstName', '%' . $criteria['firstName'] . '%');
+        }
+
+        if (!empty($criteria['lastName'])) {
+            $qb->andWhere('d.lastName LIKE :lastName')
+                ->setParameter('lastName', '%' . $criteria['lastName'] . '%');
+        }
+
+        if (!empty($criteria['Localisation'])) {
+            $qb->andWhere('d.Localisation LIKE :Localisation')
+                ->setParameter('Localisation', '%' . $criteria['Localisation'] . '%');
+        }
+
+        if (!empty($criteria['experienceLevel'])) {
+            $qb->andWhere('d.experienceLevel = :experienceLevel')
+                ->setParameter('experienceLevel', $criteria['experienceLevel']);
+        }
+
+        if (!empty($criteria['languages'])) {
+            foreach ($criteria['languages'] as $key => $language) {
+                $qb->andWhere('d.languages LIKE :language' . $key)
+                    ->setParameter('language' . $key, '%"' . $language . '"%');
+            }
+        }
+
+        if (!empty($criteria['minSalary'])) {
+            $qb->andWhere('d.minSalary >= :minSalary')
+                ->setParameter('minSalary', $criteria['minSalary']);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche Avancée{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Recherche Avancée</h1>
+        <div class="card p-4 shadow-sm">
+            {{ form_start(form, {'action': path('search_developper'), 'attr': {'class': 'needs-validation'}}) }}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_row(form.firstName, {
+                        'label': 'Prénom',
+                        'attr': {'class': 'form-control'}
+                    }) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_row(form.lastName, {
+                        'label': 'Nom',
+                        'attr': {'class': 'form-control'}
+                    }) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    {{ form_row(form.Localisation, {
+                        'label': 'Localisation',
+                        'attr': {'class': 'form-control'}
+                    }) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_row(form.experienceLevel, {
+                        'label': 'Niveau d\'expérience',
+                        'attr': {'class': 'form-control'}
+                    }) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_row(form.languages, {
+                        'label': 'Langages',
+                        'attr': {'class': 'form-control'}
+                    }) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    {{ form_row(form.minSalary, {
+                        'label': 'Salaire minimum',
+                        'attr': {'class': 'form-control'}
+                    }) }}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Rechercher</button>
+            {{ form_end(form) }}
+        </div>
+
+        <h2 class="text-center my-5">Résultats de la recherche</h2>
+        {% if developers is not empty %}
+            <ul class="list-group">
+                {% for developer in developers %}
+                    <li class="list-group-item">
+                        <a href="{{ path('developper_profile', {'id': developer.id}) }}">
+                            <strong>{{ developer.firstName }} {{ developer.lastName }}</strong>
+                            <span class="text-muted"> - {{ developer.Localisation }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-center text-muted">Aucun développeur trouvé pour les critères sélectionnés.</p>
+        {% endif %}
+        {% if is_granted('ROLE_COMPANY') %}
+            <a href="{{ path('company_home') }}" class="btn btn-lg btn-primary">Retour</a>
+        {% elseif is_granted('ROLE_DEV') %}
+            <a href="{{ path('dev_home') }}" class="btn btn-lg btn-primary">Retour</a>
+        {% endif %}
+    </div>
+{% endblock %}
