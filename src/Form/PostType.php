@@ -7,7 +7,7 @@ use App\Entity\Entreprise;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -61,9 +61,7 @@ class PostType extends AbstractType
                 'label' => 'Niveau d\'expérience requis'
             ])
             ->add('salary', MoneyType::class, ['label' => 'Salaire proposé'])
-            ->add('detail', TextareaType::class, ['label' => 'Description détaillée'])
-            ->add('createdAt', DateTimeType::class, ['widget' => 'single_text', 'label' => 'Date de création'
-            ]);
+            ->add('detail', TextareaType::class, ['label' => 'Description détaillée']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
