@@ -52,30 +52,19 @@ class Developper
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatarUrl = null;
 
-    /**
-     * @var Collection<int, Entreprise>
-     */
-    #[ORM\ManyToMany(targetEntity: Entreprise::class)]
-    private Collection $favoriteEntreprises;
+    #[ORM\Column(type: 'float')]
+    private $totalRatings = 0;
 
-    /**
-     * @var Collection<int, Post>
-     */
-    #[ORM\ManyToMany(targetEntity: Post::class)]
-    private Collection $favoritePosts;
+    #[ORM\Column(type: 'integer')]
+    private $numberOfRatings = 0;
 
-    /**
-     * @var Collection<int, self>
-     */
-    #[ORM\ManyToMany(targetEntity: self::class)]
-    private Collection $favoriteDeveloppers;
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    private Collection $evaluators;
 
     public function __construct()
     {
-        $this->favoriteEntreprises = new ArrayCollection();
-        $this->favoritePosts = new ArrayCollection();
-        $this->favoriteDeveloppers = new ArrayCollection();
         $this->createdAt = new \DateTime();
+        $this->evaluators = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -192,78 +181,6 @@ class Developper
         return $this;
     }
 
-    /**
-     * @return Collection<int, Entreprise>
-     */
-    public function getFavoriteEntreprises(): Collection
-    {
-        return $this->favoriteEntreprises;
-    }
-
-    public function addFavoriteEntreprise(Entreprise $favoriteEntreprise): static
-    {
-        if (!$this->favoriteEntreprises->contains($favoriteEntreprise)) {
-            $this->favoriteEntreprises->add($favoriteEntreprise);
-        }
-
-        return $this;
-    }
-
-    public function removeFavoriteEntreprise(Entreprise $favoriteEntreprise): static
-    {
-        $this->favoriteEntreprises->removeElement($favoriteEntreprise);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Post>
-     */
-    public function getFavoritePosts(): Collection
-    {
-        return $this->favoritePosts;
-    }
-
-    public function addFavoritePost(Post $favoritePost): static
-    {
-        if (!$this->favoritePosts->contains($favoritePost)) {
-            $this->favoritePosts->add($favoritePost);
-        }
-
-        return $this;
-    }
-
-    public function removeFavoritePost(Post $favoritePost): static
-    {
-        $this->favoritePosts->removeElement($favoritePost);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, self>
-     */
-    public function getFavoriteDeveloppers(): Collection
-    {
-        return $this->favoriteDeveloppers;
-    }
-
-    public function addFavoriteDevelopper(self $favoriteDevelopper): static
-    {
-        if (!$this->favoriteDeveloppers->contains($favoriteDevelopper)) {
-            $this->favoriteDeveloppers->add($favoriteDevelopper);
-        }
-
-        return $this;
-    }
-
-    public function removeFavoriteDevelopper(self $favoriteDevelopper): static
-    {
-        $this->favoriteDeveloppers->removeElement($favoriteDevelopper);
-
-        return $this;
-    }
-
     public function getViews(): ?int
     {
         return $this->views;
@@ -271,7 +188,7 @@ class Developper
 
     public function incrementViews(): static
     {
-        $this->views = $this->views + 1;
+        $this->views += 1;
         return $this;
     }
 
@@ -280,7 +197,7 @@ class Developper
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
 
@@ -290,6 +207,53 @@ class Developper
     public function isProfilePublic(): bool
     {
         return $this->getUserDevelopper()->isPublic();
+    }
+
+    public function getTotalRatings(): float
+    {
+        return $this->totalRatings;
+    }
+
+    public function getNumberOfRatings(): int
+    {
+        return $this->numberOfRatings;
+    }
+
+    public function addRating(int $rating, User $evaluator): void
+    {
+        if (!$this->evaluators->contains($evaluator)) {
+            $this->totalRatings += $rating;
+            $this->numberOfRatings++;
+            $this->evaluators[] = $evaluator;
+        }
+    }
+
+    public function getAverageRating(): float
+    {
+        return $this->numberOfRatings > 0 ? $this->totalRatings / $this->numberOfRatings : 0;
+    }
+
+    /**
+     * Récupère la note donnée par un utilisateur spécifique.
+     */
+    public function getRatingByUser(User $user): ?int
+    {
+        // Vérifie si l'utilisateur est dans la collection des évaluateurs
+        if ($this->evaluators->contains($user)) {
+            // Retourne la note associée à l'utilisateur
+            return $this->totalRatings / $this->numberOfRatings; // Remplacer par la logique spécifique si nécessaire
+        }
+
+        // Retourne null si l'utilisateur n'a pas évalué
+        return null;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getEvaluators(): Collection
+    {
+        return $this->evaluators;
     }
 
     public function __toString(): string

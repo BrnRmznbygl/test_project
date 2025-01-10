@@ -38,6 +38,34 @@
                             <p class="card-text">{{ developper.bio }}</p>
                         </div>
                     </div>
+
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-star me-2"></i>Évaluations et Notes</h5>
+                            <p class="card-text"><strong>Moyenne des évaluations :</strong> {{ developper.getAverageRating }} / 5</p>
+                            
+                            {% for message in app.flashes('success') %}
+                                <div class="alert alert-success">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+
+                            {% if app.user and app.user != developper.getUserDevelopper() %}
+                                <form method="POST" action="{{ path('evaluate_developer', {'id': developper.id}) }}">
+                                    <label for="rating">Évaluer :</label>
+                                    <div class="star-rating">
+                                        {% for i in 1..5 %}
+                                            <input type="radio" name="rating" id="rating{{ i }}" value="{{ i }}">
+                                            <label for="rating{{ i }}">&#9733;</label>
+                                        {% endfor %}
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm mt-2">Soumettre</button>
+                                </form>
+                            {% else %}
+                                <p>Vous ne pouvez pas évaluer ce profil.</p>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             {% else %}
                 <div class="col-md-6 text-center">
@@ -54,4 +82,60 @@
             </a>
         </div>
     </div>
+{% endblock %}
+
+{% block styles %}
+<style>
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 2em;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.star-rating input:checked ~ label {
+    color: #ffc700;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #ffdb00;
+}
+</style>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const stars = document.querySelectorAll('.star-rating label');
+    let currentRating = 0;
+
+    stars.forEach((star, index) => {
+        star.addEventListener('click', function() {
+            currentRating = 5 - index;
+            updateStars();
+            this.previousElementSibling.checked = true;
+        });
+    });
+
+    function updateStars() {
+        stars.forEach((star, index) => {
+            if (5 - index <= currentRating) {
+                star.style.color = '#ffc700';
+            } else {
+                star.style.color = '#ccc';
+            }
+        });
+    }
+});
+</script>
 {% endblock %}

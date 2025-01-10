@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class DevelopperController extends AbstractController
 {
@@ -20,13 +22,13 @@ class DevelopperController extends AbstractController
     public function show(int $id, DevelopperRepository $repository, EntityManagerInterface $entityManager): Response
     {
         $developper = $repository->find($id);
-        if($developper->getUserDevelopper() !== $this->getUser()) {
-            $developper->incrementViews();
-            $entityManager->flush();
-        }
-
         if (!$developper) {
             throw $this->createNotFoundException('Developper not found');
+        }
+
+        if ($developper->getUserDevelopper() !== $this->getUser()) {
+            $developper->incrementViews();
+            $entityManager->flush();
         }
 
         return $this->render('profile/developper.html.twig', [
@@ -61,9 +63,8 @@ class DevelopperController extends AbstractController
             $avatarFile = $form->get('avatarUrl')->getData();
 
             if ($avatarFile) {
-                // Génére un nom de fichier unique
                 $newFilename = uniqid().'.'.$avatarFile->guessExtension();
-        
+
                 try {
                     $avatarFile->move(
                         $this->getParameter('avatars_directory'),
@@ -72,10 +73,9 @@ class DevelopperController extends AbstractController
                 } catch (FileException $e) {
                     $this->addFlash('erreur', 'Veuillez réessayer.');
                 }
-        
+
                 $developper->setAvatarUrl('uploads/avatars/' . $newFilename);
             } else {
-                // Définir l'avatar par défaut si aucun fichier n'est téléchargé
                 if (!$developper->getAvatarUrl()) {
                     $developper->setAvatarUrl('uploads/avatars/default.jpg');
                 }
@@ -97,22 +97,19 @@ class DevelopperController extends AbstractController
     #[Route('/dev/home', name: 'dev_home')]
     public function index(DevelopperRepository $repository, PostRepository $postRepository): Response
     {
-        $user = $this->getUser(); // Get the logged-in user
-
-        // Find the Developper entity associated with the logged-in user
+        $user = $this->getUser();
         $developper = $repository->findOneBy(['UserDevelopper' => $user]);
 
         $mostViewedPosts = $postRepository->findMostViewedPosts(5);
         $latestPosts = $postRepository->findLatestPosts(3);
 
-        // Render the template and pass the developper variable
         return $this->render('/home/dev_home.html.twig', [
             'developper' => $developper,
             'mostViewedPosts' => $mostViewedPosts,
             'latestPosts' => $latestPosts,
         ]);
     }
-    
+
     #[Route('dev/serialize', name: 'dev_serialize')]
     public function serialize(): Response
     {
@@ -124,7 +121,42 @@ class DevelopperController extends AbstractController
 
         $developper = $user->getDevelopper();
         return $this->json($developper);
+    }
 
+    #[Route('/evaluate/{id}', name: 'evaluate_developer', methods: ['POST'])]
+    public function evaluate(Request $request, Developper $developper, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
 
+        if (!$user) {
+            $this->addFlash('error', 'Vous devez être connecté pour évaluer un développeur.');
+            return $this->redirectToRoute('developper_profile', ['id' => $developper->getId()]);
+        }
+
+        if ($user === $developper->getUserDevelopper()) {
+            $this->addFlash('error', 'Vous ne pouvez pas vous évaluer vous-même.');
+            return $this->redirectToRoute('developper_profile', ['id' => $developper->getId()]);
+        }
+
+        $rating = $request->request->getInt('rating');
+
+        if ($rating < 1 || $rating > 5) {
+            $this->addFlash('error', 'Veuillez choisir une note valide entre 1 et 5.');
+        } else {
+            $existingRating = $developper->getRatingByUser($user);
+
+            if ($existingRating) {
+                $existingRating['rating'] = $rating;
+                $this->addFlash('success', 'Votre évaluation a été mise à jour.');
+            } else {
+                $developper->addRating($rating, $user);
+                $this->addFlash('success', 'Votre évaluation a été ajoutée.');
+            }
+
+            $em->persist($developper);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('developper_profile', ['id' => $developper->getId()]);
     }
 }
