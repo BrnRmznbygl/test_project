@@ -2,45 +2,29 @@
 
 namespace App\Form;
 
-use App\Entity\Developper;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SearchDevType extends AbstractType
+class SearchPostType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstName', TextType::class, [
+            ->add('title', TextType::class, [
                 'required' => false,
-                'label' => 'First Name',
+                'label' => 'Title',
             ])
-            ->add('lastName', TextType::class, [
-                'required' => false,
-                'label' => 'Last Name',
-            ])
-            ->add('Localisation', TextType::class, [
+            ->add('localisation', TextType::class, [
                 'required' => false,
                 'label' => 'Location',
             ])
-            ->add('experienceLevel', ChoiceType::class, [
+            ->add('Technologie', ChoiceType::class, [
                 'required' => false,
-                'label' => 'Experience Level',
-                'choices' => [
-                    'Débutant' => 1,
-                    'Intermédiaire' => 2,
-                    'Expérimenté' => 3,
-                    'Expert' => 4,
-                    'Maître' => 5,
-                ],
-            ])
-            ->add('languages', ChoiceType::class, [
-                'required' => false,
-                'label' => 'Languages',
+                'label' => 'Technologies',
                 'choices' => [
                     'PHP' => 'php',
                     'JavaScript' => 'javascript',
@@ -69,16 +53,31 @@ class SearchDevType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
             ])
-            ->add('minSalary', NumberType::class, [
+            ->add('experienceLevel', ChoiceType::class, [
+                'required' => false,
+                'label' => 'Experience Level',
+                'choices' => [
+                    'Débutant' => 1,
+                    'Intermédiaire' => 2,
+                    'Expérimenté' => 3,
+                    'Expert' => 4,
+                    'Maître' => 5,
+                ],
+            ])
+            ->add('minSalary', RangeType::class, [
                 'required' => false,
                 'label' => 'Minimum Salary',
+                'attr' => [
+                    'class' => 'custom-range',
+                    'min' => 0,
+                    'max' => 25000,
+                    'step' => 250,
+                ],
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => Developper::class,
-        ]);
+        $resolver->setDefaults([]);
     }
 }
