@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\DevelopperRepository;
+use App\Repository\EntrepriseRepository;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,7 @@ class HomePageController extends AbstractController
             if ($this->isGranted('ROLE_COMPANY')) {
                 return $this->redirectToRoute('company_home');
             } elseif ($this->isGranted('ROLE_DEV')) {
-                return $this->redirectToRoute('developer_home');
+                return $this->redirectToRoute('dev_home');
             }
         }
 
@@ -32,30 +33,5 @@ class HomePageController extends AbstractController
         ]);
     }
 
-    #[Route('/company/home', name: 'company_home')]
-    public function companyHome(DevelopperRepository $developerRepo): Response
-    {
-        // Récupérer les profils les plus consultés et les derniers profils créés
-        $mostViewedProfiles = $developerRepo->findMostViewedProfiles(5);
-        $latestProfiles = $developerRepo->findLatestProfiles(3);
-
-        return $this->render('home/company_home.html.twig', [
-            'mostViewedProfiles' => $mostViewedProfiles,
-            'latestProfiles' => $latestProfiles,
-        ]);
-    }
-
-    #[Route('/dev/home', name: 'developer_home')]
-    public function developerHome(PostRepository $postRepository): Response
-    {
-        
-        // Récupérer les postes les plus populaires et les dernières offres publiées
-        $mostViewedPosts = $postRepository->findMostViewedPosts(5);
-        $latestPosts = $postRepository->findLatestPosts(3);
-
-        return $this->render('home/dev_home.html.twig', [
-            'mostViewedPosts' => $mostViewedPosts,
-            'latestPosts' => $latestPosts,
-        ]);
-    }
+    
 }

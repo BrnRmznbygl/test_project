@@ -6,6 +6,7 @@ use App\Entity\Developper;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -69,9 +70,14 @@ class DevelopperType extends AbstractType
                 ],
             ])
             ->add('bio')
-            ->add('avatarUrl', null, [
+            ->add('avatarUrl', FileType::class, [
+                'label' => 'Avatar (Image file)',
+                'mapped' => false,
+                'required' => false,
                 'constraints' => [
-                    new Assert\Url(),
+                    new Assert\Image([
+                        'maxSize' => '5M',
+                    ]),
                 ],
             ])
             ->add('isPublic', CheckboxType::class, [

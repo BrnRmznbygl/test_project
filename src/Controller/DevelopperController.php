@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Developper;
 use App\Form\DevelopperType;
 use App\Repository\DevelopperRepository;
+use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,6 +57,30 @@ class DevelopperController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $avatarFile */
+            $avatarFile = $form->get('avatarUrl')->getData();
+
+            if ($avatarFile) {
+                // Génére un nom de fichier unique
+                $newFilename = uniqid().'.'.$avatarFile->guessExtension();
+        
+                try {
+                    $avatarFile->move(
+                        $this->getParameter('avatars_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('erreur', 'Veuillez réessayer.');
+                }
+        
+                $developper->setAvatarUrl('uploads/avatars/' . $newFilename);
+            } else {
+                // Définir l'avatar par défaut si aucun fichier n'est téléchargé
+                if (!$developper->getAvatarUrl()) {
+                    $developper->setAvatarUrl('uploads/avatars/default.jpg');
+                }
+            }
+
             $isPublic = $form->get('isPublic')->getData();
             $developper->getUserDevelopper()->setPublic($isPublic);
             $entityManager->flush();
@@ -69,26 +94,16 @@ class DevelopperController extends AbstractController
         ]);
     }
 
-
     #[Route('/dev/home', name: 'dev_home')]
-    public function index(DevelopperRepository $repository): Response
+    public function index(DevelopperRepository $repository, PostRepository $postRepository): Response
     {
         $user = $this->getUser(); // Get the logged-in user
-
-        if (!$user) {
-            throw $this->createAccessDeniedException('You must be logged in to access this page.');
-        }
 
         // Find the Developper entity associated with the logged-in user
         $developper = $repository->findOneBy(['UserDevelopper' => $user]);
 
-        if (!$developper) {
-            throw $this->createNotFoundException('No developper profile found for the logged-in user.');
-        }
-
-        // Fetch most viewed posts and latest posts (replace with actual logic)
-        $mostViewedPosts = []; // Replace with actual logic to fetch most viewed posts
-        $latestPosts = []; // Replace with actual logic to fetch latest posts
+        $mostViewedPosts = $postRepository->findMostViewedPosts(5);
+        $latestPosts = $postRepository->findLatestPosts(3);
 
         // Render the template and pass the developper variable
         return $this->render('/home/dev_home.html.twig', [
@@ -97,6 +112,7 @@ class DevelopperController extends AbstractController
             'latestPosts' => $latestPosts,
         ]);
     }
+    
     #[Route('dev/serialize', name: 'dev_serialize')]
     public function serialize(): Response
     {

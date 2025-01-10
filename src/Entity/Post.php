@@ -42,6 +42,11 @@ class Post
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $createdAt;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
     // Getter et Setter pour "views"
     public function getViews(): int
     {
@@ -54,17 +59,10 @@ class Post
         return $this;
     }
 
-    // Getter et Setter pour "createdAt"
+    // Getter pour "createdAt"
     public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
     }
 
     public function getId(): ?int
@@ -109,12 +107,12 @@ class Post
     }
 
     public function getExperienceLevel(): ?int
-    { 
-        return $this->experienceLevel; 
-    } 
+    {
+        return $this->experienceLevel;
+    }
 
-    public function setExperienceLevel(?int $experienceLevel): static 
-    { 
+    public function setExperienceLevel(?int $experienceLevel): static
+    {
         $this->experienceLevel = $experienceLevel;
         return $this;
     }

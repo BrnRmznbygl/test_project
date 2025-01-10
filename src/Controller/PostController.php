@@ -5,6 +5,7 @@ use App\Entity\User;
 use App\Entity\Post;
 use App\Entity\Entreprise;
 use App\Form\PostType;
+use App\Repository\EntrepriseRepository;
 use App\Repository\PostRepository;
 use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,38 +18,17 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PostController extends AbstractController
 {
+
     private $security;
 
     public function __construct(Security $security)
     {
         $this->security = $security;
     }
-
-    #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
-    {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $plainPassword = $form->get('plainPassword')->getData();
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_login');
-        }
-
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form,
-        ]);
-    }
-
-    #[Route('/post/new', name: 'post_new')]
+    #[Route('company/post/new', name: 'post_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+
         $post = new Post();
         $form = $this->createForm(PostType::class, $post);
 
@@ -62,7 +42,9 @@ class PostController extends AbstractController
                 $entityManager->flush();
 
                 return $this->redirectToRoute('post_success');
-            } else {
+            }
+            else {
+                // Gérer le cas où l'entreprise n'est pas trouvée 
                 $this->addFlash('error', 'Entreprise non trouvée.');
             }
         }
@@ -72,7 +54,7 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/post/edit/{id}', name: 'post_edit')]
+    #[Route('company/post/edit/{id}', name: 'post_edit')]
     public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
         $user = $this->security->getUser();
@@ -97,13 +79,13 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/post/success', name: 'post_success')]
+    #[Route('company/post/success', name: 'post_success')]
     public function success(): Response
     {
         return $this->render('post/success.html.twig');
     }
 
-    #[Route('/post', name: 'post_index')]
+    #[Route('company/post', name: 'post_index')]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $posts = $entityManager->getRepository(Post::class)->findAll();
@@ -113,7 +95,7 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/post/delete/{id}', name: 'post_delete')]
+    #[Route('company/post/delete/{id}', name: 'post_delete')]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
         $user = $this->security->getUser();
@@ -131,9 +113,14 @@ class PostController extends AbstractController
         return $this->redirectToRoute('post_index');
     }
 
-    #[Route('/post/{id}', name: 'page_post')]
-    public function show(Post $post): Response
+    #[Route('company/post/{id}', name: 'page_post')]
+    public function show(Post $post, EntrepriseRepository $repository, EntityManagerInterface $entityManager): Response
     {
+        $entreprise = $post->getEntreprise();
+        if($entreprise->getUserEntreprise() !== $this->getUser()){
+            $post->incrementViews();
+            $entityManager->flush();
+        }
         return $this->render('post/show.html.twig', [
             'post' => $post,
         ]);

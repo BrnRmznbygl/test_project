@@ -65,6 +65,7 @@
     .create-button a:hover {
         background: #0056b3;
     }
+
 </style>
 
 <div class="list-wrapper">
@@ -72,8 +73,7 @@
     <ul>
         {% for post in posts %}
             <li>
-                <a href="{{ path('page_post', {id: post.id}) }}">{{ post.title }}</a> - {{ post.localisation }}
-                
+                <a href="{{ path('page_post', {id: post.id}) }}">{{ post.title }}</a> - {{ post.localisation }}              
                 {% if app.user and app.user == post.entreprise.UserEntreprise %}
                     <a href="{{ path('post_edit', {id: post.id}) }}">Modifier</a>
                     <form method="post" action="{{ path('post_delete', {id: post.id}) }}" style="display:inline;">
