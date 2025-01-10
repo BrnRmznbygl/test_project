@@ -6,9 +6,7 @@
     <div class="container py-5">
         <div class="text-center">
             <div class="mb-4">
-                {% if developper.avatarUrl is not null %}
-                <img src="{{ asset(developper.avatarUrl) }}" 
-                {% endif %}                
+                <img src="{% if developper.avatarUrl is not null %}{{ asset(developper.avatarUrl) }}{% else %}{{ asset('uploads/avatars/default.jpg') }}{% endif %}"
                      alt="Avatar de {{ developper.firstName }}"
                      class="img-fluid rounded-circle border shadow"
                      style="width: 150px; height: 150px; object-fit: cover;">
