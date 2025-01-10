@@ -23,7 +23,7 @@ class HomePageController extends AbstractController
             if ($this->isGranted('ROLE_COMPANY')) {
                 return $this->redirectToRoute('company_home');
             } elseif ($this->isGranted('ROLE_DEV')) {
-                return $this->redirectToRoute('developer_home');
+                return $this->redirectToRoute('dev_home');
             }
         }
 

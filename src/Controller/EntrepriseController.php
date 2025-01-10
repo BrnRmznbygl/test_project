@@ -6,7 +6,7 @@ use App\Repository\EntrepriseRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+use App\Repository\DevelopperRepository;
 class EntrepriseController extends AbstractController
 {
     #[Route('/company/home', name: 'company_home')]
