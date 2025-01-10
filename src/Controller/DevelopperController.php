@@ -124,6 +124,7 @@ class DevelopperController extends AbstractController
         $developper = $user->getDevelopper();
         return $this->json($developper);
     }
+
     #[Route('/searchdevelopper', name: 'search_developper')]
     public function search(Request $request, DevelopperRepository $repository): Response
     {
@@ -149,9 +150,6 @@ class DevelopperController extends AbstractController
             'form' => $form->createView(),
             'developers' => $developers,
         ]);
-    }
-
-}
     }
 
     #[Route('/evaluate/{id}', name: 'evaluate_developer', methods: ['POST'])]
