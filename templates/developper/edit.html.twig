@@ -76,9 +76,9 @@
                 {% endfor %}
             </div>
             <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
                 <a href="{{ path('developper_profile', {id: developper.id}) }}" class="btn btn-secondary">Annuler</a>
-                <a href="{{ path('dev_serialize') }}" class="btn btn-outline-info">Extraire données</a>
+                <a href="{{ path('dev_serialize') }}" class="btn btn-outline-info mx-auto">Extraire données</a>
+                <button type="submit" class="btn btn-primary ms-auto">Enregistrer</button>
             </div>
             {{ form_end(form) }}
         </div>
