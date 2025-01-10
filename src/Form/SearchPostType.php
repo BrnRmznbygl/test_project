@@ -2,25 +2,29 @@
 
 namespace App\Form;
 
-use App\Entity\Post;
-use App\Entity\Entreprise;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PostType extends AbstractType
+class SearchPostType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextType::class, ['label' => 'Titre du poste'])
-            ->add('localisation', TextType::class, ['label' => 'Localisation'])
-            ->add('technologie', ChoiceType::class, [
+            ->add('title', TextType::class, [
+                'required' => false,
+                'label' => 'Title',
+            ])
+            ->add('localisation', TextType::class, [
+                'required' => false,
+                'label' => 'Location',
+            ])
+            ->add('Technologie', ChoiceType::class, [
+                'required' => false,
+                'label' => 'Technologies',
                 'choices' => [
                     'PHP' => 'php',
                     'JavaScript' => 'javascript',
@@ -48,9 +52,10 @@ class PostType extends AbstractType
                 ],
                 'multiple' => true,
                 'expanded' => true,
-                'label' => 'Technologies recherchées'
             ])
             ->add('experienceLevel', ChoiceType::class, [
+                'required' => false,
+                'label' => 'Experience Level',
                 'choices' => [
                     'Débutant' => 1,
                     'Intermédiaire' => 2,
@@ -58,16 +63,21 @@ class PostType extends AbstractType
                     'Expert' => 4,
                     'Maître' => 5,
                 ],
-                'label' => 'Niveau d\'expérience requis'
             ])
-            ->add('salary', MoneyType::class, ['label' => 'Salaire proposé'])
-            ->add('detail', TextareaType::class, ['label' => 'Description détaillée']);
+            ->add('minSalary', RangeType::class, [
+                'required' => false,
+                'label' => 'Minimum Salary',
+                'attr' => [
+                    'class' => 'custom-range',
+                    'min' => 0,
+                    'max' => 25000,
+                    'step' => 250,
+                ],
+            ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => Post::class,
-        ]);
+        $resolver->setDefaults([]);
     }
 }

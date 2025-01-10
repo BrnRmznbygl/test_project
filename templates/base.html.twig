@@ -91,6 +91,9 @@
             {% if app.user and entreprise is defined %}
                 <li><a class="dropdown-item" href="{{ path('post_index') }}">Fiche de Poste</a></li>
             {% endif %}
+            <li><a class="dropdown-item" href="{{ path('search_developper') }}">Recherche Développeurs</a></li>
+            <li><a class="dropdown-item" href="{{ path('search_post') }}">Recherche Offre d'emplois</a></li>
+            <li><a class="dropdown-item" href="{{ path('dashboard') }}">Dashboard</a></li>
             <li>
                 <a class="dropdown-item" href="{{ app.user ? path('app_logout') : path('app_login') }}">
                     {{ app.user ? 'Déconnexion' : 'Connexion' }}

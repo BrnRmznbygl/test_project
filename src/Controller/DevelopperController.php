@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Developper;
 use App\Form\DevelopperType;
+use App\Form\SearchDevType;
 use App\Repository\DevelopperRepository;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -107,6 +108,7 @@ class DevelopperController extends AbstractController
             'developper' => $developper,
             'mostViewedPosts' => $mostViewedPosts,
             'latestPosts' => $latestPosts,
+            'profileViews' => $developper->getViews(),
         ]);
     }
 
@@ -121,6 +123,35 @@ class DevelopperController extends AbstractController
 
         $developper = $user->getDevelopper();
         return $this->json($developper);
+    }
+    #[Route('/searchdevelopper', name: 'search_developper')]
+    public function search(Request $request, DevelopperRepository $repository): Response
+    {
+        $form = $this->createForm(SearchDevType::class);
+        $form->handleRequest($request);
+
+        $developers = [];
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $criteria = [
+                'firstName' => $data->getFirstName(),
+                'lastName' => $data->getLastName(),
+                'Localisation' => $data->getLocalisation(),
+                'experienceLevel' => $data->getExperienceLevel(),
+                'languages' => $data->getLanguages(),
+                'minSalary' => $data->getMinSalary(),
+            ];
+            $developers = $repository->findBySearchCriteria($criteria);
+        }
+
+        return $this->render('recherche/searchdev.html.twig', [
+            'form' => $form->createView(),
+            'developers' => $developers,
+        ]);
+    }
+
+}
     }
 
     #[Route('/evaluate/{id}', name: 'evaluate_developer', methods: ['POST'])]

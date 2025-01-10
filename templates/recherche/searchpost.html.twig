@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Advanced Search{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Advanced Search</h1>
+        <div class="card p-4 shadow-sm">
+            {{ form_start(form, {'action': path('search_post'), 'attr': {'class': 'needs-validation'}}) }}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_row(form.title, {
+                        'label': 'Title',
+                        'attr': {'class': 'form-control'}
+                    }) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_row(form.localisation, {
+                        'label': 'Location',
+                        'attr': {'class': 'form-control'}
+                    }) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    {{ form_row(form.Technologie, {
+                        'label': 'Technologies',
+                        'attr': {'class': 'form-control'}
+                    }) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form_row(form.experienceLevel, {
+                        'label': 'Experience Level',
+                        'attr': {'class': 'form-control'}
+                    }) }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form_label(form.minSalary) }}
+                    {{ form_widget(form.minSalary, {
+                        'attr': {
+                            'oninput': "document.getElementById('minSalaryValue').textContent = this.value"
+                        }
+                    }) }}
+                    <div class="d-flex justify-content-between">
+                        <span>0</span>
+                        <span id="minSalaryValue">{{ form.minSalary.vars.value }}</span>
+                        <span>25000</span>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Search</button>
+            {{ form_end(form) }}
+        </div>
+
+        <h2 class="text-center my-5">Search Results</h2>
+        {% if posts is not empty %}
+            <ul class="list-group">
+                {% for post in posts %}
+                    <li class="list-group-item">
+                        <a href="{{ path('page_post', {'id': post.id}) }}">
+                            <strong>{{ post.title }}</strong>
+                            <span class="text-muted"> - {{ post.localisation }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-center text-muted">No posts found for the selected criteria.</p>
+        {% endif %}
+        {% if is_granted('ROLE_COMPANY') %}
+            <a href="{{ path('company_home') }}" class="btn btn-lg btn-primary">Back</a>
+        {% elseif is_granted('ROLE_DEV') %}
+            <a href="{{ path('dev_home') }}" class="btn btn-lg btn-primary">Back</a>
+        {% endif %}
+    </div>
+
+    <script>
+        document.getElementById('minSalary').addEventListener('input', function() {
+            document.getElementById('minSalaryValue').textContent = this.value;
+        });
+    </script>
+{% endblock %}

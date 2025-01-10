@@ -52,6 +52,18 @@ class Developper
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatarUrl = null;
 
+    /**
+     * @var Collection<int, Post>
+     */
+    #[ORM\ManyToMany(targetEntity: Post::class)]
+    private Collection $favoritePosts;
+
+    /**
+     * @var Collection<int, self>
+     */
+    #[ORM\ManyToMany(targetEntity: self::class)]
+    private Collection $favoriteDeveloppers;
+
     #[ORM\Column(type: 'float')]
     private $totalRatings = 0;
 
@@ -63,6 +75,9 @@ class Developper
 
     public function __construct()
     {
+        $this->favoriteEntreprises = new ArrayCollection();
+        $this->favoritePosts = new ArrayCollection();
+        $this->favoriteDeveloppers = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->evaluators = new ArrayCollection();
     }
@@ -177,6 +192,54 @@ class Developper
     public function setExperienceLevel(?int $experienceLevel): static
     {
         $this->experienceLevel = $experienceLevel;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Post>
+     */
+    public function getFavoritePosts(): Collection
+    {
+        return $this->favoritePosts;
+    }
+
+    public function addFavoritePost(Post $favoritePost): static
+    {
+        if (!$this->favoritePosts->contains($favoritePost)) {
+            $this->favoritePosts->add($favoritePost);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoritePost(Post $favoritePost): static
+    {
+        $this->favoritePosts->removeElement($favoritePost);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getFavoriteDeveloppers(): Collection
+    {
+        return $this->favoriteDeveloppers;
+    }
+
+    public function addFavoriteDevelopper(self $favoriteDevelopper): static
+    {
+        if (!$this->favoriteDeveloppers->contains($favoriteDevelopper)) {
+            $this->favoriteDeveloppers->add($favoriteDevelopper);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoriteDevelopper(self $favoriteDevelopper): static
+    {
+        $this->favoriteDeveloppers->removeElement($favoriteDevelopper);
 
         return $this;
     }

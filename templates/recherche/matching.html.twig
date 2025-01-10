@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div style="font-family: 'Arial', sans-serif; margin: 20px; padding-top: 80px;">
+
+    <!-- Titre principal -->
+    <h1 style="color: #2c3e50; text-align: center; font-size: 2.5em; margin-bottom: 20px;">Suggestions de développeurs</h1>
+
+    <!-- Liste des suggestions -->
+    <ul style="list-style-type: none; padding: 0; max-width: 1200px; margin: 0 auto;">
+        {% for suggestion in suggestedDevelopers %}
+            <li style="background: linear-gradient(135deg, #8e44ad, #3498db); color: white; margin: 20px 0; padding: 25px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <!-- Informations du développeur -->
+                    <div>
+                        <h2 style="margin: 0 0 10px; font-size: 1.8em;">{{ suggestion.developer.firstName }} {{ suggestion.developer.lastName }}</h2>
+                        <p style="margin: 5px 0;"><strong>Localisation :</strong> {{ suggestion.developer.Localisation }}</p>
+                        <p style="margin: 5px 0;"><strong>Compétences :</strong> {{ suggestion.developer.languages | join(', ') }}</p>
+                        <p style="margin: 5px 0;"><strong>Expérience :</strong> {{ suggestion.developer.experienceLevel }} / 5</p>
+                        <p style="margin: 5px 0;"><strong>Salaire souhaité :</strong> {{ suggestion.developer.minSalary }} €</p>
+                        <p style="margin: 5px 0;"><strong>Score de correspondance :</strong> {{ suggestion.score }} %</p>
+                    </div>
+                    <!-- Bouton Voir Détail -->
+                    <div>
+                        <a href="/profile/developper/{{ suggestion.developer.id }}" style="display: inline-block; padding: 15px 20px; background: white; color: #3498db; text-decoration: none; border-radius: 5px; font-weight: bold; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s;">
+                            Voir le profil
+                        </a>
+                    </div>
+                </div>
+            </li>
+        {% else %}
+            <!-- Message en cas d'absence de suggestions -->
+            <p style="text-align: center; color: #e74c3c; font-size: 1.5em;">Aucune suggestion pour le moment.</p>
+        {% endfor %}
+    </ul>
+
+</div>
+{% endblock body %}

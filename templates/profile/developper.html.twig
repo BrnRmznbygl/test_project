@@ -13,6 +13,10 @@
             </div>
             <h1 class="display-4 mb-2">{{ developper.firstName }} {{ developper.lastName }}</h1>
             <p class="text-muted"><i class="fas fa-map-marker-alt me-2"></i>{{ developper.localisation }}</p>
+            <p class="text-muted">
+                <i class="fas fa-eye me-2"></i>
+                <span class="badge bg-primary" style="font-size: 1.5rem; padding: 0.5rem 1rem;">Nombre de vues de profil: {{ developper.views }}</span>
+            </p>
         </div>
 
         <div class="row justify-content-center mt-5">
@@ -68,12 +72,12 @@
                     </div>
                 </div>
             {% else %}
-                <div class="col-md-6 text-center">
-                    <div class="alert alert-warning" role="alert">
-                        Ce profil est privé.
-                    </div>
-                </div>
             {% endif %}
+            <div class="col-md-6 text-center">
+                <div class="alert alert-warning" role="alert">
+                    Ce profil est privé.
+                </div>
+            </div>
         </div>
 
         <div class="text-center mt-4">

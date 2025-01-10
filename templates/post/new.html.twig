@@ -3,67 +3,103 @@
 {% block title %}Créer une nouvelle fiche de poste{% endblock %}
 
 {% block body %}
-<style>
-    .form-wrapper { 
-        margin: 1em auto; 
-        max-width: 800px; 
-        width: 95%; 
-        font: 18px/1.5 sans-serif; 
-        background-color: #f0f4f8; 
-        padding: 2em; 
-        border-radius: 10px; 
-        border: 1px solid #ddd; 
-    }
-    .form-wrapper h1 { 
-        text-align: center; 
-        color: #333; 
-        margin-bottom: 1em; 
-    }
-    .form-wrapper form div { 
-        margin-bottom: 1em; 
-    }
-    .form-wrapper form label { 
-        display: block; 
-        margin-bottom: 0.5em; 
-        color: #333; 
-    }
-    .form-wrapper form input, .form-wrapper form select, .form-wrapper form textarea { 
-        width: 100%; 
-        padding: 0.5em; 
-        border: 1px solid #ddd; 
-        border-radius: 5px; 
-    }
-    .form-wrapper form button { 
-        margin-top: 1em; 
-        padding: 0.5em 1em; 
-        background: #007BFF; 
-        color: white; 
-        border: none; 
-        border-radius: 5px; 
-        cursor: pointer; 
-    }
-    .form-wrapper a { 
-        display: inline-block; 
-        margin-top: 1em; 
-        color: #007BFF; 
-        text-decoration: none; 
-    }
-    .form-wrapper a:hover { 
-        text-decoration: underline; 
-    }
-</style>
-
+    <style>
+        .form-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+            background-color: #f0f4f8;
+            padding: 2em;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        .form-wrapper h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 1em;
+        }
+        .form-wrapper form div {
+            margin-bottom: 1em;
+        }
+        .form-wrapper form label {
+            display: block;
+            margin-bottom: 0.5em;
+            color: #333;
+        }
+        .form-wrapper form input,
+        .form-wrapper form select,
+        .form-wrapper form textarea {
+            width: 100%;
+            padding: 0.5em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .form-wrapper .technology-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5em;
+        }
+        .form-wrapper .technology-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5em; /* Reduce the space between the checkbox and the label */
+        }
+        .form-wrapper .technology-item input {
+            margin: 0; /* Remove default margin */
+            width: auto; /* Ensure the checkbox doesn't stretch */
+        }
+        .form-wrapper form button {
+            margin-top: 1em;
+            padding: 0.5em 1em;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-wrapper a {
+            display: inline-block;
+            margin-top: 1em;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .form-wrapper a:hover {
+            text-decoration: underline;
+        }
+    </style>
 
     <div class="form-wrapper">
         <h1>Créer une nouvelle fiche de poste</h1>
 
         {{ form_start(form) }}
-        {{ form_widget(form) }}
+        <div>
+            {{ form_label(form.title) }}
+            {{ form_widget(form.title) }}
+        </div>
+        <div>
+            {{ form_label(form.detail) }}
+            {{ form_widget(form.detail) }}
+        </div>
+
+        <!-- Organized Technology Checkboxes -->
+        <div>
+            {{ form_label(form.technologie) }}
+            <div class="technology-list">
+                {% for technology in form.technologie %}
+                    <div class="technology-item">
+                        {{ form_widget(technology) }}
+                        {{ form_label(technology) }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
         <button type="submit">Créer</button>
-    {{ form_end(form) }}
-    
-    <div class="return-button">
-        <a href="{{ path('post_index') }}">Retour à la liste des postes</a>
+        {{ form_end(form) }}
+
+        <div class="return-button">
+            <a href="{{ path('post_index') }}">Retour à la liste des postes</a>
+        </div>
     </div>
-</div>
 {% endblock %}

@@ -5,6 +5,7 @@ use App\Entity\User;
 use App\Entity\Post;
 use App\Entity\Entreprise;
 use App\Form\PostType;
+use App\Form\SearchPostType;
 use App\Repository\EntrepriseRepository;
 use App\Repository\PostRepository;
 use App\Security\UserAuthenticator;
@@ -113,7 +114,7 @@ class PostController extends AbstractController
         return $this->redirectToRoute('post_index');
     }
 
-    #[Route('company/post/{id}', name: 'page_post')]
+    #[Route('post/{id}', name: 'page_post')]
     public function show(Post $post, EntrepriseRepository $repository, EntityManagerInterface $entityManager): Response
     {
         $entreprise = $post->getEntreprise();
@@ -123,6 +124,31 @@ class PostController extends AbstractController
         }
         return $this->render('post/show.html.twig', [
             'post' => $post,
+        ]);
+    }
+    #[Route('/searchpost', name: 'search_post')]
+    public function search(Request $request, PostRepository $repository): Response
+    {
+        $form = $this->createForm(SearchPostType::class);
+        $form->handleRequest($request);
+
+        $posts = [];
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $criteria = [
+                'title' => $data['title'],
+                'localisation' => $data['localisation'],
+                'Technologie' => $data['Technologie'],
+                'experienceLevel' => $data['experienceLevel'],
+                'minSalary' => $data['minSalary'],
+            ];
+            $posts = $repository->findMatchingPosts($criteria);
+        }
+
+        return $this->render('recherche/searchpost.html.twig', [
+            'form' => $form->createView(),
+            'posts' => $posts,
         ]);
     }
 }
