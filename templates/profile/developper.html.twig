@@ -47,7 +47,7 @@
                         <div class="card-body">
                             <h5 class="card-title"><i class="fas fa-star me-2"></i>Évaluations et Notes</h5>
                             <p class="card-text"><strong>Moyenne des évaluations :</strong> {{ developper.getAverageRating }} / 5</p>
-                            
+
                             {% for message in app.flashes('success') %}
                                 <div class="alert alert-success">
                                     {{ message }}
@@ -73,11 +73,11 @@
                 </div>
             {% else %}
             {% endif %}
-            <div class="col-md-6 text-center">
+            {% if not developper.isProfilePublic() %}
                 <div class="alert alert-warning" role="alert">
                     Ce profil est privé.
                 </div>
-            </div>
+            {% endif %}
         </div>
 
         <div class="text-center mt-4">
