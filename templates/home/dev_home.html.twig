@@ -3,27 +3,50 @@
 {% block title %}Accueil Développeur{% endblock %}
 
 {% block body %}
-    <div style="text-align: center;">
-        <h1>Postes les plus populaires</h1>
-        <ul>
-            {% for post in mostViewedPosts %}
-                <li>
-                    <a href="{{ path('page_post', {id: post.id}) }}">{{ post.title }}</a> - {{ post.views }} vues
-                </li>
-            {% endfor %}
-        </ul>
+    <div class="container mt-5">
+        <h1 class="text-center mb-5">Bienvenue sur votre tableau de bord, Développeur</h1>
 
-        <h1>Dernières offres publiées</h1>
-        <ul>
-            {% for post in latestPosts %}
-                <li>
-                    <a href="{{ path('page_post', {id: post.id}) }}">{{ post.title }}</a> - Publié le {{ post.createdAt|date('d/m/Y') }}
-                </li>
-            {% endfor %}
-        </ul>
+        <!-- Section des postes les plus populaires -->
+        <div class="mb-5">
+            <h2 class="text-primary">Postes les plus populaires</h2>
+            <div class="list-group">
+                {% for post in mostViewedPosts %}
+                    <a href="{{ path('page_post', {id: post.id}) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <span>{{ post.title }}</span>
+                        <span class="badge bg-info text-dark">{{ post.views }} vues</span>
+                    </a>
+                {% else %}
+                    <p class="text-muted">Aucun poste populaire pour le moment.</p>
+                {% endfor %}
+            </div>
+        </div>
 
-        <a href="{{ path('developper_profile', {id: developper.id}) }}" class="btn">Voir Profil Développeur</a>
-        <a href="{{ path('developper_edit', {id: developper.id}) }}" class="btn">Modifier Profil</a>
-        <a href="{{ path('search_post') }}" class="btn">Rechercher des Postes</a>
+        <!-- Section des dernières offres publiées -->
+        <div class="mb-5">
+            <h2 class="text-primary">Dernières offres publiées</h2>
+            <div class="list-group">
+                {% for post in latestPosts %}
+                    <a href="{{ path('page_post', {id: post.id}) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <span>{{ post.title }}</span>
+                        <small class="text-muted">Publié le {{ post.createdAt|date('d/m/Y') }}</small>
+                    </a>
+                {% else %}
+                    <p class="text-muted">Aucune nouvelle offre publiée pour le moment.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Actions pour le développeur -->
+        <div class="text-center">
+            <a href="{{ path('developper_profile', {id: developper.id}) }}" class="btn btn-primary btn-lg mx-2">
+                Voir Profil Développeur
+            </a>
+            <a href="{{ path('developper_edit', {id: developper.id}) }}" class="btn btn-warning btn-lg mx-2">
+                Modifier Profil
+            </a>
+            <a href="{{ path('search_post') }}" class="btn btn-success btn-lg mx-2">
+                Rechercher des Postes
+            </a>
+        </div>
     </div>
 {% endblock %}
