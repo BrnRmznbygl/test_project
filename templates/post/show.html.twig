@@ -3,79 +3,83 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block body %}
-<style>
-    .post-wrapper { 
-        margin: 2em auto; 
-        max-width: 800px; 
-        width: 95%; 
-        font: 18px/1.5 sans-serif; 
-        background-color: #f0f4f8; 
-        padding: 2em; 
-        border-radius: 10px; 
-        border: 1px solid #ddd; 
-    }
-    .post-wrapper h1 { 
-        text-align: center; 
-        color: #333; 
-        margin-bottom: 1em; 
-    }
-    .post-wrapper p { 
-        margin: 0.5em 0; 
-        background: #fff; 
-        padding: 1em; 
-        border-radius: 5px; 
-        border: 1px solid #ddd; 
-    }
-    .post-wrapper strong { 
-        color: #333; 
-    }
-    .post-wrapper a { 
-        color: #007BFF; 
-        text-decoration: none; 
-        font-weight: bold; 
-    }
-    .post-wrapper a:hover { 
-        text-decoration: underline; 
-    }
-    .post-wrapper .actions { 
-        text-align: center; 
-        margin-top: 1em; 
-    }
-    .post-wrapper .actions a, .post-wrapper .actions button { 
-        margin: 0 0.5em; 
-        padding: 0.5em 1em; 
-        background: #007BFF; 
-        color: white; 
-        border: none; 
-        border-radius: 5px; 
-        cursor: pointer; 
-        text-decoration: none; 
-    } 
+    <style>
+        .post-wrapper {
+            margin: 2em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+            background-color: #f0f4f8;
+            padding: 2em;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+        .post-wrapper h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 1em;
+        }
+        .post-wrapper p {
+            margin: 0.5em 0;
+            background: #fff;
+            padding: 1em;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .post-wrapper strong {
+            color: #333;
+        }
+        .post-wrapper a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .post-wrapper a:hover {
+            text-decoration: underline;
+        }
+        .post-wrapper .actions {
+            text-align: center;
+            margin-top: 1em;
+        }
+        .post-wrapper .actions a, .post-wrapper .actions button {
+            margin: 0 0.5em;
+            padding: 0.5em 1em;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
 
-    .post-wrapper .actions button { 
-        background: #dc3545; 
-    }
-</style>
+        .post-wrapper .actions button {
+            background: #dc3545;
+        }
+    </style>
 
-<div class="post-wrapper">
-    <h1>{{ post.title }}</h1>
-    <p><strong>Localisation :</strong> {{ post.localisation }}</p>
-    <p><strong>Technologies :</strong> {{ post.technologie }}</p>
-    <p><strong>Niveau d'expérience :</strong> {{ post.experienceLevel }}</p>
-    <p><strong>Salaire :</strong> {{ post.salary }}</p>
-    <p><strong>Description :</strong> {{ post.detail }}</p>
-    <p><strong>Entreprise :</strong> {{ post.entreprise.name }}</p>
-    <p><strong>Vues :</strong> {{ post.views }}</p>
+    <div class="post-wrapper">
+        <h1>{{ post.title }}</h1>
+        <p><strong>Localisation :</strong> {{ post.localisation }}</p>
+        <p><strong>Technologies :</strong> {{ post.technologie|join(', ') }}</p>
+        <p><strong>Niveau d'expérience :</strong> {{ post.experienceLevel }}</p>
+        <p><strong>Salaire :</strong> {{ post.salary }}</p>
+        <p><strong>Description :</strong> {{ post.detail }}</p>
+        <p><strong>Entreprise :</strong> {{ post.entreprise.name }}</p>
+        <p><strong>Vues :</strong> {{ post.views }}</p>
 
-    <div class="actions">
-        {% if app.user and app.user == post.entreprise.UserEntreprise %}
-            <a href="{{ path('post_edit', {id: post.id}) }}">Modifier</a>
-            <form method="post" action="{{ path('post_delete', {id: post.id}) }}" style="display:inline;">
-                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ post.id) }}">
-                <button type="submit">Supprimer</button>
-            </form>
-        {% endif %}
-        <a href="{{ path('post_index') }}">Retour à la liste des postes</a>
+        <div class="actions">
+            {% if app.user and app.user == post.entreprise.UserEntreprise %}
+                <a href="{{ path('post_edit', {id: post.id}) }}">Modifier</a>
+                <form method="post" action="{{ path('post_delete', {id: post.id}) }}" style="display:inline;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ post.id) }}">
+                    <button type="submit">Supprimer</button>
+                </form>
+            {% endif %}
+            {% if is_granted('ROLE_COMPANY') %}
+                <a href="{{ path('post_index') }}">Retour à la liste des postes</a>
+            {% elseif is_granted('ROLE_DEV') %}
+                <a href="{{ path('dev_home') }}">Retour</a>
+            {% endif %}
+        </div>
     </div>
-</div>
 {% endblock %}

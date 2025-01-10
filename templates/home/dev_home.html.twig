@@ -7,14 +7,18 @@
         <h1>Postes les plus populaires</h1>
         <ul>
             {% for post in mostViewedPosts %}
-                <li>{{ post.title }} - {{ post.views }} vues</li>
+                <li>
+                    <a href="{{ path('page_post', {id: post.id}) }}">{{ post.title }}</a> - {{ post.views }} vues
+                </li>
             {% endfor %}
         </ul>
 
         <h1>Dernières offres publiées</h1>
         <ul>
             {% for post in latestPosts %}
-                <li>{{ post.title }} - Publié le {{ post.createdAt|date('d/m/Y') }}</li>
+                <li>
+                    <a href="{{ path('page_post', {id: post.id}) }}">{{ post.title }}</a> - Publié le {{ post.createdAt|date('d/m/Y') }}
+                </li>
             {% endfor %}
         </ul>
 

@@ -113,7 +113,7 @@ class PostController extends AbstractController
         return $this->redirectToRoute('post_index');
     }
 
-    #[Route('company/post/{id}', name: 'page_post')]
+    #[Route('post/{id}', name: 'page_post')]
     public function show(Post $post, EntrepriseRepository $repository, EntityManagerInterface $entityManager): Response
     {
         $entreprise = $post->getEntreprise();
