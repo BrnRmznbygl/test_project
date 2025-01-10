@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\User;
@@ -19,15 +18,22 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PostController extends AbstractController
 {
+
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
     #[Route('company/post/new', name: 'post_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+
         $post = new Post();
         $form = $this->createForm(PostType::class, $post);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupérer l'entreprise sélectionnée dans le formulaire 
             $entreprise = $this->getUser()->getEntreprise();
 
             if ($entreprise) {
@@ -51,6 +57,13 @@ class PostController extends AbstractController
     #[Route('company/post/edit/{id}', name: 'post_edit')]
     public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->security->getUser();
+        $entreprise = $post->getEntreprise();
+
+        if ($user !== $entreprise->getUserEntreprise()) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à modifier ce post.');
+        }
+
         $form = $this->createForm(PostType::class, $post);
 
         $form->handleRequest($request);
@@ -85,6 +98,13 @@ class PostController extends AbstractController
     #[Route('company/post/delete/{id}', name: 'post_delete')]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->security->getUser();
+        $entreprise = $post->getEntreprise();
+
+        if ($user !== $entreprise->getUserEntreprise()) {
+            throw $this->createAccessDeniedException('Vous n\'êtes pas autorisé à supprimer ce post.');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->request->get('_token'))) {
             $entityManager->remove($post);
             $entityManager->flush();

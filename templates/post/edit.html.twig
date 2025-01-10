@@ -1,20 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier la fiche de poste{% endblock %}
+{% block title %}Créer un nouveau poste{% endblock %}
 
 {% block body %}
-    <style>
-        .form-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    </style>
+<style>
+    .form-wrapper { margin: 2em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; background: #f9f9f9; padding: 1em; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+    .form-wrapper h1 { text-align: center; color: #333; margin-bottom: 1em; }
+    .form-wrapper form div { margin-bottom: 1em; }
+    .form-wrapper form label { display: block; margin-bottom: 0.5em; color: #333; }
+    .form-wrapper form input, .form-wrapper form select, .form-wrapper form textarea { width: 100%; padding: 0.5em; border: 1px solid #ddd; border-radius: 5px; }
+    .form-wrapper form button { margin-top: 1em; padding: 0.5em 1em; background: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
+</style>
 
-    <div class="form-wrapper">
-        <h1>Modifier la fiche de poste</h1>
-
-        {{ form_start(form) }}
+<div class="form-wrapper">
+    <h1>Créer un nouveau poste</h1>
+    {{ form_start(form) }}
         {{ form_widget(form) }}
-        <button type="submit">Modifier</button>
-        {{ form_end(form) }}
-
-        <a href="{{ path('post_index') }}">Retour à la liste des postes</a>
+        <button type="submit">Enregistrer</button>
+    {{ form_end(form) }}
+    <div style="text-align: center; margin-top: 1em;">
+        <a href="{{ path('post_index') }}" style="padding: 0.5em 1em; background: #007BFF; color: white; border-radius: 5px; text-decoration: none;">Retour à la liste des postes</a>
     </div>
+</div>
 {% endblock %}
