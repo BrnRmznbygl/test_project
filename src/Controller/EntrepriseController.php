@@ -9,21 +9,24 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class EntrepriseController extends AbstractController
 {
-    #[Route('/profile/entreprise/{id}', name: 'entreprise_profile')]
-    public function show(int $id, EntrepriseRepository $repository): Response
+    #[Route('/company/home', name: 'company_home')]
+    public function companyHome(DevelopperRepository $developerRepo,EntrepriseRepository $entrepriseRepository): Response
     {
-        // Récupérer les développeurs les plus consultés
-        $mostViewedDeveloppers = $developperRepository->findMostViewedProfiles();
+        $user = $this->getUser();
+        $entreprise = $entrepriseRepository->findOneBy(['UserEntreprise' => $user]);
 
-        // Récupérer les derniers développeurs créés
-        $latestDeveloppers = $developperRepository->findLatestProfiles();
-  
-        return $this->render('entreprise/home.html.twig', [
-              'mostViewedDeveloppers' => $mostViewedDeveloppers,
-              'latestDeveloppers' => $latestDeveloppers,
+        // Récupérer les profils les plus consultés et les derniers profils créés
+        $mostViewedProfiles = $developerRepo->findMostViewedProfiles(5);
+        $latestProfiles = $developerRepo->findLatestProfiles(3);
+
+        return $this->render('home/company_home.html.twig', [
+            'entreprise' => $entreprise,
+            'mostViewedProfiles' => $mostViewedProfiles,
+            'latestProfiles' => $latestProfiles,
         ]);
     }
 
+    
     #[Route('/company/serialize', name: 'company_serialize')]
     public function serialize(): Response
     {
