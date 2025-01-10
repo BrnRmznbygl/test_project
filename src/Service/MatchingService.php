@@ -1,41 +1,60 @@
 <?php
 namespace App\Service;
 
-use App\Repository\DevelopperRepository;
-use App\Repository\PostRepository;
+use App\Entity\Developper;
+use App\Entity\Post;
 
 class MatchingService
 {
-    private $developperRepository;
-    private $postRepository;
-
-    public function __construct(DevelopperRepository $developperRepo, PostRepository $postRepo)
+    /**
+     * Effectue un matching entre les développeurs et un poste donné.
+     *
+     * @param array<Developper> $developers Liste de développeurs.
+     * @param Post $post Le poste à matcher.
+     * @param int $minScore Score minimal pour correspondre.
+     * @return array Liste des développeurs correspondants.
+     */
+    public function matchDevelopersToPost(array $developers, Post $post, int $minScore): array
     {
-        $this->developperRepository = $developperRepo;
-        $this->postRepository = $postRepo;
-    }
+        $matches = [];
 
-    public function findMatchesForDevelopper($developper)
-    {
-        $criteria = [
-            'languages' => $developper->getLanguages(),
-            'Localisation' => $developper->getLocalisation(),
-            'minSalary' => $developper->getMinSalary(),
-            'experienceLevel' => $developper->getExperienceLevel(),
-        ];
+        foreach ($developers as $developer) {
+            $score = 0;
 
-        return $this->postRepository->findMatchingPosts($criteria);
-    }
+            // Vérifie les langages/technologies
+            if (!empty($developer->getLanguages()) && !empty($post->getTechnologie())) {
+                $developerLanguages = array_map('strtolower', $developer->getLanguages());
+                $postTechnologies = array_map('strtolower', explode(',', $post->getTechnologie()));
 
-    public function findMatchesForPost($post)
-    {
-        $criteria = [
-            'Technologie' => $post->getTechnologie(),
-            'localisation' => $post->getLocalisation(),
-            'salary' => $post->getSalary(),
-            'experienceLevel' => $post->getExperienceLevel(),
-        ];
+                if (count(array_intersect($developerLanguages, $postTechnologies)) > 0) {
+                    $score += 1;
+                }
+            }
 
-        return $this->developperRepository->findMatchingDeveloppers($criteria);
+            // Vérifie la localisation
+            if ($developer->getLocalisation() === $post->getLocalisation()) {
+                $score += 1;
+            }
+
+            // Vérifie le niveau d'expérience
+            if ($developer->getExperienceLevel() >= $post->getExperienceLevel()) {
+                $score += 1;
+            }
+
+            // Vérifie le salaire
+            if ($developer->getMinSalary() !== null && $post->getSalary() !== null) {
+                if ($developer->getMinSalary() <= $post->getSalary()) {
+                    $score += 1;
+                }
+            }
+
+            // Ajouter le développeur si le score est suffisant
+            if ($score >= $minScore) {
+                $matches[] = $developer;
+            }
+        }
+
+        return $matches;
     }
 }
+

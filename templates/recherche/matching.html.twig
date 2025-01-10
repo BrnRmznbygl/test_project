@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Matching pour le poste : {{ post.title }}</h1>
+
+{{ form_start(form) }}
+    {{ form_row(form.minScore) }}
+    <button type="submit">Rechercher</button>
+{{ form_end(form) }}
+
+<p>Score minimal requis : {{ minScore }}</p>
+
+<ul>
+    {% for developer in matches %}
+        <li>
+            <strong>{{ developer.firstName }} {{ developer.lastName }}</strong><br>
+            Localisation : {{ developer.Localisation }}<br>
+            Compétences : {{ developer.languages | join(', ') }}<br>
+            Expérience : {{ developer.experienceLevel }} / 5<br>
+            Salaire minimum : {{ developer.minSalary }} €
+        </li>
+    {% else %}
+        <p>Aucun développeur correspondant trouvé avec un score minimal de {{ minScore }}.</p>
+    {% endfor %}
+</ul>
+{% endblock %}
