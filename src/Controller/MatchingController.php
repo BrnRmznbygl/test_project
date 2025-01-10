@@ -4,7 +4,8 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Form\MatchingFormType;
 use App\Repository\DevelopperRepository;
-use App\Service\MatchingService;
+use App\Service\DeveloperSuggestionService;
+use App\Service\PostSuggestionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,32 +13,27 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MatchingController extends AbstractController
 {
-    #[Route('/post/{id}/matching', name: 'post_matching')]
-    public function match(
-        Post $post,
-        DevelopperRepository $developperRepository,
-        MatchingService $matchingService,
-        Request $request
+    #[Route('/company/post/{id}/suggestions', name: 'company_suggestions')]
+public function suggestDevelopers(
+    Post $post,
+    DeveloperSuggestionService $developerSuggestionService,
+): Response {
+    $suggestedDevelopers = $developerSuggestionService->suggestDevelopersForPost($post);
+    return $this->render('recherche/matching.html.twig', [
+        'suggestedDevelopers' => $suggestedDevelopers,
+    ]);
+}
+
+    #[Route('/dev/suggestions', name: 'developer_suggestions')]
+    public function suggestPosts(
+        PostSuggestionService $suggestionService,
+        DevelopperRepository $developerRepository
     ): Response {
-        $developers = $developperRepository->findAll();
+    $developer = $developerRepository->findOneBy(['UserDevelopper' => $this->getUser()]);
+    $suggestedPosts = $suggestionService->suggestPostsForDeveloper($developer);
 
-        // Création du formulaire
-        $form = $this->createForm(MatchingFormType::class);
-        $form->handleRequest($request);
-
-        $minScore = 3; // Score par défaut
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $minScore = $data['minScore']; // Récupération du score minimum
-        }
-
-        $matches = $matchingService->matchDevelopersToPost($developers, $post, $minScore);
-
-        return $this->render('matching/match.html.twig', [
-            'post' => $post,
-            'matches' => $matches,
-            'minScore' => $minScore,
-            'form' => $form->createView(),
-        ]);
-    }
+        return $this->render('recherche/postSuggestion.html.twig', [
+        'suggestedPosts' => $suggestedPosts,
+    ]);
+}
 }
